@@ -113,7 +113,7 @@ Similarly to Sec.~\ref{sec:Signelradio}, the solution relies on redundant measur
 \label{sec:geometry}
 
 The cameras are independently deployed in the field. The location vector ${\bf l}_c$
-of each camera $c$ is known by GPS, and the internal parameters $\Psi_c$ are pre-calibrated in the lab. However, the orientation (yaw, pitch and roll angle vector ${\bf \Theta}_c$) is loosely set, as the camera is placed in the field. We calibrate the orientation by detecting and tracking extra-terrestrial (XT) objects (Sun and/or Moon)~\cite{Seiz2002,lalonde}, across day or night in the hemispherical field of view. Using astronomical charts per time $t$ and ${\bf l}_c$, an XT object is known to be at angle vector (zenith, azimuth) ${\bm \theta}^{\rm XT}(t)$ relative to a global coordinate system. Given camera orientation ${\bf \Theta}_c$, a ray from ${\bm \theta}^{\rm XT}(t)$ should project to pixel
+of each camera $c$ is known by GPS, and the internal parameters $\Psi_c$ are pre-calibrated in the lab. However, the orientation (yaw, pitch and roll angle vector ${\bf \Theta}_c$) is loosely set, as the camera is placed in the field. We calibrate the orientation by automatically detecting and tracking extra-terrestrial (XT) objects (Sun and/or Moon)~\cite{Seiz2002,lalonde}, across day or night in the hemispherical field of view. Using astronomical charts per time $t$ and ${\bf l}_c$, an XT object is known to be at angle vector (zenith, azimuth) ${\bm \theta}^{\rm XT}(t)$ relative to a global coordinate system. Given camera orientation ${\bf \Theta}_c$, a ray from ${\bm \theta}^{\rm XT}(t)$ should project to pixel:
 \begin{equation}
 {\bf x}^{\rm XT}_{\rm model}(t) = {\cal P}({\bm \theta}^{\rm XT}(t)|{\bf \Theta}_c,\Psi_c)
 \;,
@@ -129,6 +129,7 @@ The actual measured pixel ${\bf x}^{\rm XT}_{\rm measured}(t)$ has uncertainty, 
 \;,
  \label{eq:hatThetac}
 \end{equation}
+which we optimize using an exhaustive or gradient descent with null initialization.
 The orientation calibration is illustrated in Fig.~\ref{fig:sunmotion}.
 \begin{figure}[t!]
 \begin{center}
@@ -157,6 +158,7 @@ $\tilde I_t[{\bf l}_c,{\bm \theta}(\bf x)]$.
 \label{sec:set}
 
 Before proceeding with mathematical problems and solutions, we now describe  a small experimental network, which we built to test the hypotheses of this paper.  To show that it can work with very low-cost  camera nodes (units), each of the 5 units was built from basic components, and coarse alignment tolerances. Its core is a Raspberry-Pi computer used in DIY electronics, and a 5MP Raspberry-Pi camera. In this camera, the gain, response and white-balance can be fixed, avoiding temporal radiometric variations. We cut-off its OEM lens, and manually mounted a small fisheye lens. Due to this coarse lens-to-chip alignment, {\em each camera has a different peripheral dead-region}, creating a missing part in the hemispheric view-field and vignetting distinct to each camera. As derived below, a {\em {\bf network} as-a-whole can {\bf inherently overcome}} these issues. Every 30 seconds, synchronously, all units automatically transmit image data using the cellular network to the internet (cloud-service). Each unit is solar powered (Figs.~\ref{fig:system},\ref{fig:photomotion}).
+In our experiment, the camera units were installed on various rooftops and ran for weeks, capturing 70GB of sky imagery.
 \begin{figure}[t!]
 \begin{center}
    \includegraphics[width=0.6\linewidth]{figures/system.eps}
@@ -230,6 +232,7 @@ The process was then repeated to detect slight local variations of gain (vignett
   {\rm median}_{t} \{\tilde I_t[{\bf l}_b,{\bm \theta}]/I_t[{\bf l}_a,{\bm \theta}]\}
  \label{eq:hatm}
 \end{equation}
+Under this scheme we perform radiometric calibration for all the cameras with respect to some master camera.
 After radiometric corrections, the light-field samples are denoted tilde $\hat I_t[{\bf l}_b,{\bm \theta}]$.
 
 
