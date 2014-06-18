@@ -345,6 +345,55 @@ Here $s\in[0,1]$, where either bound is achieved at gray clouds or blue sky, rep
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Simulations}
+\label{sec:simulation}
+
+We first applied computer simulations to test the camera network
+concept. The simulations allow us to quantify the reconstruction success. They
+also enable us to check the limits imposed by the static sun blocker.
+In the following we describe the simulation setup: camera images were
+synthesized using the SHDOM~\cite{Evans1998} radiative transfer
+solver. For the atmosphere, we used the cumulus clouds example distributed
+with the SHDOM code which was produced using Large Eddy Simulations (LES).
+The atmosphere spans $8 \times 8 {\rm km}$ and the clouds are distributed
+between the heights of $500 {\rm m}$ to $1500 {\rm m}$.
+We synthesized 100 cameras equally spaced on a $2.5 \times 2.5{\rm km}^2$
+grid. We performed multiple simulations each time using only a random subset
+of the camera network. The simulations were performed with and without
+a sun blocker. The reconstruction score was calculated using the following
+equation:
+\begin{equation*}
+  {\rm Score}=\frac{A \cap B}{A \cup B},
+\end{equation*}
+where $A$ is the estimated cloud formation and $B$ is the ground truth
+cloud formation given in the LES example. Note that the LES example
+details the  water particle distribution and therefore $B$ is calculated
+as the voxels where the water content equals are surpasses some threshold.
+The threshold we used was half the maximal water content in the example.
+Due to this method we don't expect to achieve perfect reconstruction.
+Fig.~\ref{fig:simulations} summarizes the results
+of the simulations. As expected of space carving,
+results improve fast from 2 to 10 cams. Even when sun blocker is applied,
+the algorithm is able to reconstruct the cloud formation. As expected
+more cameras are needed in order to compensate for the limited view of
+each camera.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics{figures/simulations.pdf}
+    \caption{Reconstruction success as function of camera number. The
+      solid blue line marks the simulations without sun blocker. The
+      dashed red line markd the simulations with sun blocker applied.
+      The transparent fill marks the standard deviation of repeated
+      simulations.
+    }
+    \label{fig:simulations}
+  \end{center}
+\end{figure}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Cloud Reconstruction Results}
 \label{sec:results}
 
