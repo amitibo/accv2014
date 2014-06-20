@@ -115,19 +115,19 @@ Even in high grade equipment, there are generally radiometric inconsistencies be
 \label{sec:geometry}
 
 The cameras are deployed in the field. The location vector ${\bf l}_c$
-of each camera $c$ is known by GPS, and the internal parameters $\Psi_c$ are pre-calibrated in the lab. However, the orientation (yaw, pitch and roll angle vector ${\bf \Theta}_c$) is loosely set, as the camera is placed in the field. We calibrate the orientation by automatically detecting and tracking extra-terrestrial (XT) objects (Sun and/or Moon)~\cite{Seiz2002,lalonde}, across day or night\footnote{In~\cite{Seiz2002}, calibration relied on manual tracking of a special flight and long exposures at night.} in the hemispherical field of view. Using astronomical charts per time $t$ and ${\bf l}_c$, an XT object is known to be at angle vector (zenith, azimuth) ${\bm \theta}^{\rm XT}(t)$ relative to a global coordinate system. Given camera orientation ${\bf \Theta}_c$, a ray from ${\bm \theta}^{\rm XT}(t)$ should project to pixel:
+of each camera $c$ is known by GPS, and the internal parameters $\Psi_c$ are pre-calibrated in the lab. However, the orientation (yaw, pitch and roll angle vector ${\bf \Theta}_c$) is loosely set, as the camera is placed in the field. We calibrate the orientation by automatically detecting and tracking extra-terrestrial (XT) objects (Sun and/or Moon)~\cite{Seiz2002,lalonde}, across day or night\footnote{In~\cite{Seiz2002}, calibration relied on manual tracking of a special flight and long exposures at night.} in the hemispherical field of view.  Using astronomical charts per time $t$ and ${\bf l}_c$, an XT object is known to be at angle vector (zenith, azimuth) ${\bm \theta}^{\rm XT}(t)$ relative to a global coordinate system. Given camera orientation ${\bf \Theta}_c$, a ray from ${\bm \theta}^{\rm XT}(t)$ should project to pixel:
 \begin{equation}
-{\bf x}^{\rm XT}_{\rm model}(t) = {\cal P}({\bm \theta}^{\rm XT}(t)|{\bf \Theta}_c,\Psi_c)
+{\bf x}^{\rm XT}_{\rm model}(t) = {\Pi}({\bm \theta}^{\rm XT}(t);{\bf \Theta}_c,\Psi_c)
 \;,
  \label{eq:xt}
 \end{equation}
-where ${\cal P}$ denotes projection (converting ray angles to image pixels).
+where ${\Pi}$ denotes projection (converting ray angles to image pixels).
 The actual measured pixel ${\bf x}^{\rm XT}_{\rm measured}(t)$ has uncertainty, due to the finite angular size of the XT object and blooming. However, during the course of a day or night, the number of frames
   $N^{\rm frames}$ is ${\cal O}(100)$, leading to a simple optimization formulation:
 \begin{equation}
  \hat{\bf \Theta}_c=\arg\min_{{\bf \Theta}_c}
  \sum_{t=1}^{N^{\rm frames}}
- \|{\cal P}({\bm \theta}^{\rm XT}(t)|{\bf \Theta}_c,\Psi_c) - {\bf x}^{\rm XT}_{\rm measured}(t)\|^2
+ \|{\Pi}({\bm \theta}^{\rm XT}(t);{\bf \Theta}_c,\Psi_c) - {\bf x}^{\rm XT}_{\rm measured}(t)\|^2
 \;.
  \label{eq:hatThetac}
 \end{equation}
@@ -147,7 +147,7 @@ We solved it using exhaustive search or gradient descent from null initializatio
 
 Based on $\hat{\bf \Theta}_c$, all captured images $\tilde I_{c,t}(\bf x)$ taken by camera $c$ are aligned to the global coordinate system. Any image pixel ${\bf x}$ of camera $c$ is backprojected to a ray at direction vector ${\bm \theta}$ in the global system, given by
 \begin{equation}
- {\bm \theta}({\bf x})={\cal P}^{-1}({\bf x}|\hat{\bf{\Theta}}_c,\Psi_c)
+ {\bm \theta}({\bf x})={\Pi}^{-1}({\bf x};\hat{\bf{\Theta}}_c,\Psi_c)
   \;.
  \label{eq:thetac}
 \end{equation}
