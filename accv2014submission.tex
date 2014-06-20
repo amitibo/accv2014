@@ -21,7 +21,7 @@
 \pagestyle{headings}
 \mainmatter
 
-\psdraft
+%\psdraft
 
 
 \def\ACCV14SubNumber{215}  % Insert your submission number here
@@ -202,18 +202,18 @@ The values $\{\tilde I_t[{\bf l}_c,{\bm \theta}]\}_c$ correspond to readouts of 
 
 The assumption we make is of {\em regional stationarity}. In a region containing the cameras, the chance of a cloud, clear sky, or haziness affecting $\tilde I_t[{\bf l}_c,{\bm \theta}]$ is {\em independent} of $c$. Thus, inter-camera image variations due to atmospheric conditions are {\em random and unbiased}. Per camera $c$ and view angle ${\bm \theta}$, bias is due to cause {\tt 2}. We easily detect and characterize the bias by capturing {\em statistics over time}.
 
-Consider, for example, Fig.~\ref{fig:calibration}. It shows [Top-Left] radiometric inconsistency between cameras $a$ and $b$. The figure then shows a scatter-plot of
+Consider, for example, Fig.~\ref{fig:calibration}a. It shows radiometric inconsistency between cameras $a$ and $b$. The figure then shows a scatter-plot of
 $\tilde I_t[{\bf l}_a,{\bm \theta}]$ vs.~$\tilde I_t[{\bf l}_{b},{\bm \theta}]$, $\forall t,{\bm \theta}$, for the red-channel.
 \begin{figure}[t!]
 \begin{center}
-   \includegraphics[width=\linewidth]{figures/bias3.eps}
+   \includegraphics[width=\linewidth]{figures/bias4.eps}
 \end{center}
    \vspace{-0.6cm}
    \caption{[a] Splitting the field of view to upper/lower halves, to pixels corresponding
    respectively to either $\tilde I_t[{\bf l}_a,{\bm \theta}]$  or $\tilde I_t[{\bf l}_{b},{\bm \theta}]$. Radiometric inconsistency
-   shows-up as a seam-line across which colors slightly change. [d] Scatter-plot of
+   shows-up as a seam-line across which colors slightly change. [b] Scatter-plot of
    $\tilde I_t[{\bf l}_a,{\bm \theta}]$ vs.~$\tilde I_t[{\bf l}_{b},{\bm \theta}]$, $~\forall t,{\bm \theta}$, red-channel. [c] The estimated offset map ${\hat o}_{b-a}({\bm \theta})$, red channel. It is derived based on a set of images taken during several hours.
-   [b] Splitting the field of view in half, to {\em corrected} pixels from either
+   [d] Splitting the field of view in half, to {\em corrected} pixels from either
    $\hat I_t[{\bf l}_a,{\bm \theta}]$  or $\hat I_t[{\bf l}_{b},{\bm \theta}]$: inconsistencies are greatly
    diminished.
    }
@@ -234,7 +234,7 @@ The process was then repeated to detect slight local variations of gain (vignett
  \label{eq:hatm}
 \end{equation}
 Under this scheme we perform radiometric calibration for all the cameras with respect to some master camera.
-After radiometric corrections, the light-field samples are denoted tilde $\hat I_t[{\bf l}_b,{\bm \theta}]$.
+After radiometric corrections, the light-field samples are denoted hat $\hat I_t[{\bf l}_b,{\bm \theta}]$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -307,18 +307,18 @@ ${\bf \bullet}$  As latitude increase towards the tropic latitudes, $D$ decrease
 \label{sec:3Dc}
 
 Network-based acquisition and the processes described above, yield a calibrated sampled light-field of the sky. Using this light-field, we can estimate the 3D cloud structure above the network domain, and beyond. This is done by the following steps:~ %({\tt A})~Estimate the background;~
-({\tt A})~Per time $t$, give a {\rm cloud score} to each ray $[{\bf l}_c,{\bm \theta}]$, as we explain below.~({\tt B})~Perform a fuzzy version of space carving~\cite{Kutulakos2000} (reminiscent of back-projection in tomography).
+({\tt A})~Per time $t$, give a {\rm cloud score} to each ray $[{\bf l}_c,{\bm \theta}]$, as we explain below.~({\tt B})~Perform a fuzzy version of space carving~\cite{Kutulakos2000,Ihrke2004} (reminiscent of back-projection in tomography).
 
 We first describe ({\tt B}).  The set of all sampled light-field rays is ${\cal R}$, where
 \mbox{$|{\cal R}|=N^{\rm rays}$}. A ray is indexed by $r$, and it corresponds to a specific $[{\bf l}_c,{\bm \theta}]$. Voxel $k$ projects to a subset of the rays $\rho_k\subset{\cal R}$,
 that reach $\nu_k$ viewpoints. Suppose a ray $r\in{\cal R}$ has a cloud-score $s(r)\in[0,1]$, where $s=0$ means there is definitely no cloud on the ray, while $s=1$ means there is confidently a cloud there. Per voxel $k$, define a back-projected score
 \begin{equation}
- B_k= \left[ \prod_{r\in\rho_k} s(r)\right]^{1/|\rho_k|}
+ B_k= \left[ \prod_{r\in\rho_k} s(r)\right]^{1/\rho_k}
  \;\; ~~{\rm if}~~ \nu_k\geq 2
   \;.
  \label{eq:Bk}
 \end{equation}
-The back-projected score of voxel $k$ is null, if $k$ is not observed by at least two viewpoints. This score is null also if $s(r)=0$ for any $r\in\rho_k$. If all $r\in\rho_k$ have same score $s$, then $B_k=s$. Equation~(\ref{eq:Bk}) carves-out voxles that contradict support for clouds.
+The back-projected score of voxel $k$ is null, if $k$ is not observed by at least two viewpoints. This score is null also if $s(r)=0$ for any $r\in\rho_k$. If all $r\in\rho_k$ have same score $s$, then $B_k=s$. Equation~(\ref{eq:Bk}) carves-out voxels that contradict support for clouds.
 
 Different cloud regions have signature appearances. Ignoring this would wrongly allow matching of, say, a darker cloud-bottom to a bright sun-lit side of a cloud, or a smooth cloud region to a textured one. Thus, photometric and appearance consistency across viewpoints is incorporated (the photo-hull concept in space-carving~\cite{Kutulakos2000}). Clouds are diffuse, cooperating with this requirement.
 From the images, a feature vector ${\bf v}(r,t)$ is extracted for any measured ray $r$.
@@ -372,7 +372,7 @@ Lighting conditions were consistent with Copenhagen (unrelated to the anonymous 
 Radiative transfer using the discrete ordinate spherical-harmonic method (SHDOM)~\cite{Evans1998} rendered images taken by 100 cameras placed in a $2.5\times 2.5{\rm km}^2$ domain. Recovery simulations used random subsets
 of the network, where the whole network is either with or without
 a sun blocker. In the LES, a voxel is occupied by cloud if its water-mass parameter is not null. In the recovery, voxel $k$ is classified as cloud if $T_k>0.01$.
-We measured the classification error rate, across all voxels. 
+We measured the classification error rate, across all voxels.
 % Note that the LES example
 %details the  water particle distribution and therefore $B$ is calculated
 %as the voxels where the water content equals are surpasses some threshold.
@@ -387,7 +387,7 @@ each camera.
   \begin{center}
     \includegraphics{figures/simulations.eps}
     \caption{Classification error rate as a function of the number of
-    cameras. [Solid Blue] Without sun blocker. [Dashed Red] With sun blocker.  
+    cameras. [Solid Blue] Without sun blocker. [Dashed Red] With sun blocker.
     Fluctuations are within the random sampling standard deviation.}
     \label{fig:simulations}
   \end{center}
