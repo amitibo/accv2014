@@ -307,7 +307,7 @@ that reach $\nu_k$ viewpoints. Suppose a ray $r\in{\cal R}$ has a cloud-score $s
 \end{equation}
 The back-projected score of voxel $k$ is null, if $k$ is not observed by at least two viewpoints. The back-projected score is null also if $s(r)=0$ for any $r\in\rho_k$. If all $r\in\rho_k$ have same score $s$, then $B_k=s$. The result of this operation is immediate carving-out of voxles that contradict  support for clouds.
 
-Different cloud regions have different gray shades. Ignoring these differences would wrongly allow matching of, say, a darker cloud-bottom to a bright sun-lit side of a cloud. To counter this, we require photometric consistency across viewpoints (the photo-hull concept in space-carving~\cite{Kutulakos2000}). Clouds are diffuse, cooperating with this requirement. Per per voxel $k$, the set of measured radiances is \mbox{${\cal I}_t(k)\equiv\{\hat I_t(r)\}_{r\in\rho_k}$}. Across viewpoints, the measured variance of this set is ${\rm VAR}[{\cal I}_t(k)]$, per $t$. Define a photo-consistency score
+Different cloud regions have different gray shades. Ignoring these differences would wrongly allow matching of, say, a darker cloud-bottom to a bright sun-lit side of a cloud. To counter this, we require photometric consistency across viewpoints (the photo-hull concept in space-carving~\cite{Kutulakos2000}). Clouds are diffuse, cooperating with this requirement. Per voxel $k$, the set of measured radiances is \mbox{${\cal I}_t(k)\equiv\{\hat I_t(r)\}_{r\in\rho_k}$}. Across viewpoints, the measured variance of this set is ${\rm VAR}[{\cal I}_t(k)]$, per $t$. Define a photo-consistency score
 \begin{equation}
  P_k= \exp\left(
          -\Sigma_{\rm color}\{{\rm VAR}[{\cal I}_t^{\rm color}(k)]\}/\sigma^2
@@ -317,7 +317,7 @@ Different cloud regions have different gray shades. Ignoring these differences w
 \end{equation}
 where $\sigma^2$ is a scale parameter, and the index {\em color} refers to the red, green and blue channels. Overall, the total cloud-score of a voxel is $T_k=B_kP_k$.
 
-The resulting 3D field $\{T_k\}_k$ is a volumetric estimate of cloud occupancy. It is biased to yield clouds larger than they really are: high-altitude voxels occluded by the cloud-base from all viewpoints are interpreted as being cloudy, since for them $T_k$ is high. This is a realization of a basic ambiguity: if a voxel is occluded from all viewpoints, then there is no way of telling if it is cloudy or not, unless auxiliary or prior knowledge is available. Incorporating a visibility prior favors smaller clouds that explain the data. If voxel $k$ is completely occluded by other cloudy voxels, then it is pruned (carved) out. Voxel $k$ can only maintain its $T_k$ if there are at least two camera viewpoints from which $k$ is no occluded by other clouded voxels. This pruning is achieved by sweeping~\cite{Kutulakos2000} the field $\{T_k\}_k$ iteratively. The pruned 3D cloud occupancy field is denoted $\{\tilde T_k\}_k$. We can maintain the non-binary (fuzzy) nature or $\{\tilde T_k\}_k$. This way, it possesses the inherent semi-transparency and subtle ambiguity of clouds.
+The resulting 3D field $\{T_k\}$ is a volumetric estimate of cloud occupancy. It is biased to yield clouds larger than they really are: high-altitude voxels occluded by the cloud-base from all viewpoints are interpreted as being cloudy, since for them $T_k$ is high. This is a realization of a basic ambiguity: if a voxel is occluded from all viewpoints, then there is no way of telling if it is cloudy or not, unless auxiliary or prior knowledge is available. Incorporating a visibility prior favors smaller clouds that explain the data. If voxel $k$ is completely occluded by other cloudy voxels, then it is pruned (carved) out. Voxel $k$ can only maintain its $T_k$ if there are at least two camera viewpoints from which $k$ is not occluded by other clouded voxels. This pruning is achieved by sweeping~\cite{Kutulakos2000} the field $\{T_k\}$ iteratively. The pruned 3D cloud occupancy field is denoted $\{\tilde T_k\}$. We can maintain the non-binary (fuzzy) nature or $\{\tilde T_k\}$. This way, it possesses the inherent semi-transparency and subtle ambiguity of clouds.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Basic cloud score}
@@ -342,6 +342,25 @@ the cloud-score we used per ray (pixel) is
  \label{eq:sr}
 \end{equation}
 Here $s\in[0,1]$, where either bound is achieved at gray clouds or blue sky, repectively. An example of applying this operator on an image is shown in Fig.~\ref{fig:photomotion}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Spatial similarity score}
+\label{sec:appearancecore}
+
+We had found that simple color consistency was not enough when tackling difficult cloud structures such as high-altitude ciruss due to spatial ambiguity and very low baseline between the cameras. In such cases spatial information would be a natural way to incorporate a multi-view stereo approach into our space-carving scheme.
+To this end, we introduce an additional score-function $\{S_k\}$ which promotes  structural similarity between patches around the projected voxel.
+128-bin dense SIFT descriptors were chosen to maintain robustness under scale and view variations.
+Per voxel $k$, the set of measured radiances is \mbox{${\cal I}_t(k)\equiv\{\hat I_t(r)\}_{r\in\rho_k}$}. Across viewpoints, the measured variance of this set is ${\rm VAR}[{\cal I}_t(k)]$, per $t$. Define a photo-consistency score
+Similarity score is computed in a simmilar manner as in Eq.~(\ref{eq:Ak}):
+\begin{equation}
+ P_k= \exp\left(
+         -\Sigma_{\rm bin}\{{\rm VAR}[{\cal SIFT}_t^{\rm bin}(k)]\}/\sigma'^2
+         \right)
+  \;,
+ \label{eq:Dist}
+\end{equation}
+where $\sigma'^2$ is a scale parameter, and $bin=\{1..128\}$. ${\rm VAR}[{\cal SIFT}_t^{\rm bin}(k)]$ computes the variance at bin. Overall, the total cloud-score of a voxel is $T_k=B_kP_k$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -410,20 +429,20 @@ We applied the approach on various captured scenes. One scene had cumulus clouds
 %   }
 %\label{fig:cu}
 %\end{figure}
-Cross-sections of the recovered 3D cloud-occupancy field $\{\tilde T_k\}_k$ are shown in Fig.~\ref{fig:projection}. The lateral domain of the clouds is much larger than the camera network.
+Cross-sections of the recovered 3D cloud-occupancy field $\{\tilde T_k\}$ are shown in Fig.~\ref{fig:projection}. The lateral domain of the clouds is much larger than the camera network.
 \begin{figure}[t!]
 \begin{center}
    \includegraphics[width=1\linewidth]{figures/clouds_reconstructions.eps}
 \end{center}
    \vspace{-0.6cm}
-   \caption{3D cumulus cloud recovery results. (a,b) Cross-sections of the recovered cloud-occupancy field $\{\tilde T_k\}_k$. Note how the domain of the clouds is much larger than the camera network. Cloud
-   altitude is above sea-level. (c) Estimated sky-background image.  Based on four viewpoints (indexed $a,b,c,d$), the 3D volumetric cloud-occupancy field $\{\tilde T_k\}_k$ was derived. The field $\{\tilde T_k\}_k$ was projected to viewpoint $e$, and overlayed on the estimated sky-background image. The resulting synthetic cloud-score image $J[{\bf l}_e,{\bm \theta}]$ is shown in (d). This can be compared to the real captured image $\hat I_t[{\bf l}_e,{\bm \theta}]$, shown in (e).}
+   \caption{3D cumulus cloud recovery results. (a,b) Cross-sections of the recovered cloud-occupancy field $\{\tilde T_k\}$. Note how the domain of the clouds is much larger than the camera network. Cloud
+   altitude is above sea-level. (c) Estimated sky-background image.  Based on four viewpoints (indexed $a,b,c,d$), the 3D volumetric cloud-occupancy field $\{\tilde T_k\}$ was derived. The field $\{\tilde T_k\}$ was projected to viewpoint $e$, and overlayed on the estimated sky-background image. The resulting synthetic cloud-score image $J[{\bf l}_e,{\bm \theta}]$ is shown in (d). This can be compared to the real captured image $\hat I_t[{\bf l}_e,{\bm \theta}]$, shown in (e).}
 \label{fig:projection}
 \end{figure}
 Accounting for the altitude of the cameras above sea-level, the clouds mainly reside between 800m to 1450m above Sea-level. We used two indicators to validate the results. First, there are worldwide balloon-based radiosonde measurements including quantitative vertical humidity profiles. The radiosonde nearest to our network is 88km away, but on a similar coastal strip. It indicated a layer of high humidity that can yield clouds in the range $[770,1881]$m above sea-level, consistent with our clouds.
 
-Second, we cross-validated 3D recovery. We used four cameras (indexed $a,b,c,d$) out of five, for 3D estimation. Camera $e$ was ignored. Then, we projected the estimated 3D cloud distribution into viewpoint $e$, and compared to the ground truth. The rendered image is as follows. {\em Ray casting}~\cite{Levoy1990} of  field $\{\tilde T_k\}_k$ is performed on a ray corresponding to
-$[{\bf l}_e,{\bm \theta}]$. Ray-casting aggregates $\{\tilde T_k\}_k$ on all voxels intersected by the ray. The result is a cloud-score image $w[{\bf l}_e,{\bm \theta}]$.
+Second, we cross-validated 3D recovery. We used four cameras (indexed $a,b,c,d$) out of five, for 3D estimation. Camera $e$ was ignored. Then, we projected the estimated 3D cloud distribution into viewpoint $e$, and compared to the ground truth. The rendered image is as follows. {\em Ray casting}~\cite{Levoy1990} of  field $\{\tilde T_k\}$ is performed on a ray corresponding to
+$[{\bf l}_e,{\bm \theta}]$. Ray-casting aggregates $\{\tilde T_k\}$ on all voxels intersected by the ray. The result is a cloud-score image $w[{\bf l}_e,{\bm \theta}]$.
 To visualize $w[{\bf l}_e,{\bm \theta}]$, we used it as $\alpha$-map to the estimated sky-background image (Eq.~\ref{eq:SKY}). The alpha-map is
 \begin{equation}
  \alpha[{\bf l}_e,{\bm \theta}]=\left\{
@@ -448,14 +467,14 @@ This image does not pretend to properly render clouds in their true shades and e
 
 This rendering relies on the redundancy of the network. Even if a viewpoint is blocked, much of its information can be derived using other viewpoints compounded with 3D recovery. This supports the proposed approach for static Sun-blocking (part of the sky missing from a view), described in Sec.~\ref{sec:mutiSun}.
 
-Another scene had a layer of alto-cumulus clouds. Figure~\ref{fig:alto} shows sample frames from this scene, and cross-sections of the recovered 3D cloud-occupancy field $\{\tilde T_k\}_k$.
+Another scene had a layer of alto-cumulus clouds. Figure~\ref{fig:alto} shows sample frames from this scene, and cross-sections of the recovered 3D cloud-occupancy field $\{\tilde T_k\}$.
 \begin{figure}[t!]
 \begin{center}
    \includegraphics[width=1\linewidth]{figures/altos.eps}
 \end{center}
    \vspace{-0.6cm}
    \caption{3D altocumulus cloud recovery results. (a,b) Sample frames.
-   (c,d)  Cross-sections of the recovered cloud-occupancy field $\{\tilde T_k\}_k$. Cloud
+   (c,d)  Cross-sections of the recovered cloud-occupancy field $\{\tilde T_k\}$. Cloud
    altitude is above sea-level.}
 \label{fig:alto}
 \end{figure}
