@@ -95,7 +95,7 @@ Consequently, sky-observing wide-field cameras often have a {\em dynamic sun blo
 \subsection{Current 3D Cloud Mapping}
 \label{sec:current3D}
 
-Existing sky-imaging systems used for research and operational meterology\footnote{There are also ground viewing webcams that happen to see sky parts~\cite{bradley} and weather cameras
+Existing sky-imaging systems used for research and operational meterology\footnote{There are also ground viewing webcams that happen to see sky parts~\cite{bradley,jacobs14cloudmap} and weather cameras
 that are too sparse to be integrated for recovery.} are few, relying on high quality cameras and other parts~\cite{allmen,angeo-27-953-2009,cazorla,long,Seiz,kassianov}. Due to their complexity and costs, they were only used to estimate {\em cloud-base} over narrow regions right above a narrow-baseline camera pair. Satellite-based estimation of 3D {\em cloud-tops} has been proposed by MISR~\cite{Seiz2006}. It takes several minutes for MISR to capture multiple viewpoints of a region, during which the clouds generally move. Weather radars sense {\em raindrops}, which are much larger than cloud-drops and ice crystals. Hence radar does not sense clouds that do not produce rain.
 
 
@@ -183,7 +183,7 @@ The units were placed on several rooftops and ran for weeks, capturing 70GB of s
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Radiometric Self-Calibration in a Camera Network}
+\subsection{Inter-camera Relative Radiometric Self-Calibration}
 \label{sec:mutiradio}
 
 %
@@ -241,7 +241,7 @@ After radiometric corrections, the light-field samples are denoted tilde $\hat I
 \section{Network-assisted Background Estimation}
 \label{sec:background}
 
-It is often helpful to characterize the background, as motivated by change-detection computer vision algorithms. In monocular settings, such algorithms use temporal filtering to characterize the background: foreground dynamic objects are at {\em different locations at different times} and are thus pruned. In our case this translates to stating that a cloud in
+It is often helpful to characterize the background, as motivated by change-detection computer vision algorithms. In monocular settings, such algorithms use temporal filtering to characterize the background\footnote{Physically-based sky appearance models~\cite{hosek2012analytic} can also be used for estimating the background. But these models usually require knowing several atmospheric parameters that are not known in our case, e.g. aerosol distribution}: foreground dynamic objects are at {\em different locations at different times} and are thus pruned. In our case this translates to stating that a cloud in
 $\tilde I_t[{\bf l}_c,{\bm \theta}]$ is often not in
 $\tilde I_{t'}[{\bf l}_c,{\bm \theta}]$, when $t'\neq t$. However, if clouds move slowly, while illumination gradually changes, temporal filtering may be insufficient. This is illustrated in Fig.~\ref{fig:sky}.
 
@@ -322,7 +322,7 @@ The back-projected score of voxel $k$ is null, if $k$ is not observed by at leas
 
 Different cloud regions have signature appearances. Ignoring this would wrongly allow matching of, say, a darker cloud-bottom to a bright sun-lit side of a cloud, or a smooth cloud region to a textured one. Thus, photometric and appearance consistency across viewpoints is incorporated (the photo-hull concept in space-carving~\cite{Kutulakos2000}). Clouds are diffuse, cooperating with this requirement.
 From the images, a feature vector ${\bf v}(r,t)$ is extracted for any measured ray $r$.
-We used SIFT descriptors~\cite{SIFT} and the radiance in the each color channel. Element $q$ of ${\bf v}(r,t)$ is $v_q(r,t)$. The values of this element, for all rays that intersect voxel $k$, is \mbox{${\cal V}_q(k,t)\equiv\{v_q(r,t)\}_{r\in\rho_k}$}.
+We used SIFT descriptors~\cite{lowe2004distinctive} and the radiance in the each color channel. Element $q$ of ${\bf v}(r,t)$ is $v_q(r,t)$. The values of this element, for all rays that intersect voxel $k$, is \mbox{${\cal V}_q(k,t)\equiv\{v_q(r,t)\}_{r\in\rho_k}$}.
 Across viewpoints, the measured variance in this set is
 ${\rm VAR}[{\cal V}_q(k,t)]$. Define an appearance consistency score as
 \begin{equation}
