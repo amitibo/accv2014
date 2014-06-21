@@ -200,8 +200,16 @@ The values $\{\tilde I_t[{\bf l}_c,{\bm \theta}]\}_c$ correspond to readouts of 
  {\tt 2}.~ Slight inter-camera radiometric inconsistencies, which we need to estimate.\\
  Cause {\tt 1} is usually dominant. We need to overcome it, in order to analyze cause {\tt 2}.
 
-The assumption we make is of {\em regional stationarity}. In a region containing the cameras, the chance of a cloud, clear sky, or haziness affecting $\tilde I_t[{\bf l}_c,{\bm \theta}]$ is {\em independent} of $c$. Thus, inter-camera image variations due to atmospheric conditions are {\em random and unbiased}. Per camera $c$ and view angle ${\bm \theta}$, bias is due to cause {\tt 2}. We easily detect and characterize the bias by capturing {\em statistics over time}.
-
+The assumption we make is of {\em regional stationarity}. In a region containing the cameras, the chance of a cloud, clear sky, or haziness affecting $\tilde I_t[{\bf l}_c,{\bm \theta}]$ is {\em independent} of $c$. Thus, inter-camera image variations due to atmospheric conditions are {\em random and unbiased}. Per camera $c$ and view angle ${\bm \theta}$, bias is due to cause {\tt 2} (). We easily detect and characterize the bias by capturing {\em statistics over time}.
+\begin{figure}[t!]
+\begin{center}
+   \includegraphics[width=\linewidth]{figures/regional_stationarity.eps}
+\end{center}
+   \vspace{-0.6cm}
+   \caption{[a] and [b] show the same camera network at time $t_1$ and $t_2$ respectively. Inter-camera image variations can be caused by random atmospheric conditions (e.g. $\tilde I_{t_1}[{\bf l}_b,{\bm \theta}]$ and $I_{t_1}[{\bf l}_c,{\bm \theta}]$) and therefore be camera and time independent ($I_{t_2}[{\bf l}_b,{\bm \theta}]$ and $I_{t_2}[{\bf l}_c,{\bm \theta}]$). On the other hand slight inter-camera radiometric inconsistencies (e.g. $\tilde I_{t_1}[{\bf l}_a,{\bm \theta}]$ and $I_{t_1}[{\bf l}_c,{\bm \theta}]$) bias the image statistics.
+   }
+\label{fig:calibration}
+\end{figure}
 Consider, for example, Fig.~\ref{fig:calibration}a. It shows radiometric inconsistency between cameras $a$ and $b$. The figure then shows a scatter-plot of
 $\tilde I_t[{\bf l}_a,{\bm \theta}]$ vs.~$\tilde I_t[{\bf l}_{b},{\bm \theta}]$, $\forall t,{\bm \theta}$, for the red-channel.
 \begin{figure}[t!]
