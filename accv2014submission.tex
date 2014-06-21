@@ -360,8 +360,7 @@ The resulting 3D field $\{T_k\}$ is a volumetric estimate of cloud occupancy. It
 \label{sec:cloudscore}
 
 
-For a basic cloud score (step {\tt A}), there are various functions in the literature. We considered several of them, including using the background derived in Sec.~\ref{sec:background}. There is certainly room for increased sophistication, including sky modeling and machine learning. However,
-a ratio of image readout at the red/blue color channels, $\tilde I^{\rm red}/\tilde I^{\rm blue}$, is widely use in the literature~\cite{Yamashita2004,Seiz2002}. Overall, we found it to be an effective feature in broad daylight: clouds are grey (unit red-blue ratio), and the cloudless sky is significantly biased to blue
+For a basic cloud score (step {\tt A}), there are various functions in the literature. We considered several of them, including using the background derived in Sec.~\ref{sec:background}. There is certainly room for increased sophistication, including sky modeling and machine learning, but we choose to stick with a simple measure. The ratio of image readout at the red/blue color channels, $\tilde I^{\rm red}/\tilde I^{\rm blue}$, is widely used in the literature~\cite{Yamashita2004,Seiz2002}. Overall, we found it to be an effective feature in broad daylight: clouds are grey (unit red-blue ratio), and the cloudless sky is significantly biased to blue
 (below $\approx 0.8$ red-blue ratio). Thus, for demonstrations in this paper,
 the cloud-score we used per ray (pixel) is
 \begin{equation}
@@ -398,7 +397,7 @@ We measured the classification error rate, across all voxels.
 %The threshold we used was half the maximal water content in the example.
 %Due to this method we don't expect to achieve perfect reconstruction.
 The results are plotted in Fig.~\ref{fig:simulations}.  As expected of space carving,
-results improve fast from 2 to 10 cameras. Even when sun blocker is applied,
+results improve fast from 2 to 10 cameras. Even when a sun blocker is applied,
 the algorithm is able to reconstruct the cloud formation. As expected,
 more cameras are needed in order to compensate for the limited view of
 each camera.
@@ -465,7 +464,7 @@ The rendered image is then
 % \label{eq:alpha}
 %\end{equation}
 This image does not pretend to properly render clouds in their true shades and effect on the sky. It simply served to visualize the result, as shown in Fig.~\ref{fig:projection}d. It can be compared to the true corresponding image $\hat I_t[{\bf l}_e,{\bm \theta}]$, in Fig.~\ref{fig:projection}e.
-This rendering relies on the redundancy of the network. Even if a viewpoint is blocked, much of its information can be derived using other viewpoints compounded with 3D recovery. This supports the proposed approach for static Sun-blocking (part of the sky missing from a view).
+This rendering relies on the redundancy of the network. Even if a viewpoint is blocked, much of its information can be derived using other viewpoints compounded with 3D recovery. This is consistent with the proposed approach for handling static partial blocking of viewfields. See more results in ~\cite{Supp2014}.
 
 Another scene had a layer of alto-cumulus clouds. Figure~\ref{fig:alto} shows sample frames from this scene, and cross-sections of the recovered 3D cloud-occupancy field $\{\tilde T_k\}$.
 \begin{figure}[t!]
@@ -494,7 +493,7 @@ Accounting for the altitude of the cameras above sea-level, these estimated clou
 
 Scaling light-field imaging hugely to sense the sky, would use  a large network of camera nodes, each having a hemispherical field of view, deployed over a wide area. Such a network can reach anywhere wireless communication exists, and in principle can be a continent-wide light-field system. This sensing approach offers significant advantages over existing technologies (experimental and operational) of atmospheric sensing, particularly  3D imaging, and doing so in high spatio-temporal resolution. This sensing approach poses new questions for computer vision and computational photography. These include network-based extensions to monocular tasks including network-based radiometric calibration and background estimation. Network redundancy offers the ability of by-passing saturation or blind spots, as those created by the sun, without moving parts.
 
-To enable a massive network, each node should have very low-cost. To demonstrate this can work, we built the units in our experimental small-network using very basic components and coarse alignment tolerances. In a long term, mass producing consistent units would ensure proper alignment performance (non dead-regions) and operational robustness over long periods. Still, this concept opens the door to more interesting research. In the direction of the sun blocker, a diffraction grating can disperse direct sunlight (currently blocked) or skylight, to measure their spectra. This principle is already used by Aeronet~\cite{Holben1998} to characterize aerosols. Night-time operation is another interesting challenge: if a known planet and star appears missing on ray $r$, this indicated a cloud on $r$. Furthermore, such a light-field system can be used for studying lightnings and bird life, in 3D time-lapses.
+To enable a massive network, each node should have very low-cost. To demonstrate this can work, we built the units in our experimental small-network using very basic components and coarse alignment tolerances. In a long term, mass producing consistent units would ensure proper alignment performance (non dead-regions) and operational robustness over long periods. Still, this concept opens the door to more interesting research. In the direction of the sun blocker, a diffraction grating can disperse direct sunlight (currently blocked) or skylight, to measure its spectrum. This principle is already used by Aeronet~\cite{Holben1998} to characterize aerosols. Night-time operation is another interesting challenge: if a known planet and star appears missing on ray $r$, this indicated a cloud on $r$. Furthermore, such a light-field system can be used for studying bird life, in 3D time-lapses.
 
 
 
