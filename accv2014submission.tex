@@ -398,10 +398,12 @@ We measured the classification error rate, across all voxels.
 %The threshold we used was half the maximal water content in the example.
 %Due to this method we don't expect to achieve perfect reconstruction.
 The results are plotted in Fig.~\ref{fig:simulations}.  As expected of space carving,
-results improve fast from 2 to 10 cameras. Even when sun blocker is applied,
-the algorithm is able to reconstruct the cloud formation. As expected,
+results improve fast from 2 to 10 cameras. Even when a sun blocker is applied,
+the algorithm is able to reconstruct the cloud formation. Then, as expected,
 more cameras are needed in order to compensate for the limited view of
-each camera.
+each camera. In our setup the cameras observe the clouds only from below. This is the classical limited
+angle problem known from visual hull and tomography algorithms. Therefore the reconstruction error does not
+converge to zero.
 \begin{figure}
   \begin{center}
     \includegraphics{figures/simulations.eps}
@@ -417,7 +419,8 @@ each camera.
 \subsection*{Cloud Reconstruction Experiment}
 \label{sec:results}
 
-We applied the approach on various captured scenes\footnote{Sun blocker was not used here due to the fact that Saturation and Blooming effects do not impair cloud reconstruction efforts.}. One scene had cumulus clouds, similar to those seen in Fig.~\ref{fig:photomotion}.
+Our experiments showed that the Blooming and Saturation due to the Sun did not affect the clouds reconstruction. Therefore we did not use the sun blocker.
+We applied the approach described in Sec.~\ref{sec:3Dc} on various captured scenes. One scene had cumulus clouds, similar to those seen in Fig.~\ref{fig:photomotion}.
 %
 %
 %Fig.~\ref{fig:cu} shows sample frames of one scene, having cumulus clouds.
