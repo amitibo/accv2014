@@ -21,7 +21,7 @@
 \pagestyle{headings}
 \mainmatter
 
-%\psdraft
+\psdraft
 
 
 \def\ACCV14SubNumber{215}  % Insert your submission number here
@@ -64,7 +64,7 @@ The computational photography problems include radiometric self-calibration acro
 \subsection{Monocular radiometric self-calibration}
 \label{sec:Signelradio}
 
-A large network should use low-cost camera units. Such cameras often have spatial and temporal radiometric inconsistencies. For a single camera, consistent readouts can be obtained in the field by self-calibration. The strongest methods rely on redundant images, taken at modulated settings. In particular, images taken during slow panning yield spatial non-uniformity correction (NUC) of offset and gain (e.g., by vignetting~\cite{LitvinovCVPR05,Kang2000}). For example, spatial gain is often modeled by a function $M({\bf x})$, where \mbox{${\bf x}=(x,y)$} is a camera pixel. Thus the image pixel irradiance at time $t$ is
+A large network should use low-cost camera units. Such cameras often have spatial and temporal radiometric inconsistencies. For a single camera, consistent readouts can be obtained in the field by self-calibration. The strongest methods rely on redundant images, taken at modulated settings. Images taken during slow panning yield spatial non-uniformity correction (NUC) of offset and gain (e.g., by vignetting~\cite{LitvinovCVPR05,Kang2000}). For example, spatial gain is often modeled by a function $M({\bf x})$, where \mbox{${\bf x}=(x,y)$} is a camera pixel. Thus the image pixel irradiance at time $t$ is
 \begin{equation}
  \tilde{I}_t({\bf x}) = M({\bf x})I_t(O) \;,
  \label{eq:tilde_I}
@@ -98,6 +98,34 @@ Consequently, sky-observing wide-field cameras often have a {\em dynamic sun blo
 Existing sky-imaging systems used for research and operational meterology\footnote{There are also ground viewing webcams that happen to see sky parts~\cite{bradley,jacobs14cloudmap} and weather cameras
 that are too sparse to be integrated for recovery.} are few, relying on high quality cameras and other parts~\cite{allmen,angeo-27-953-2009,cazorla,long,Seiz,kassianov}. Due to their complexity and costs, they were only used to estimate {\em cloud-base} over narrow regions right above a narrow-baseline camera pair. Satellite-based estimation of 3D {\em cloud-tops} has been proposed by MISR~\cite{Seiz2006}. It takes several minutes for MISR to capture multiple viewpoints of a region, during which the clouds generally move. Weather radars sense {\em raindrops}, which are much larger than cloud-drops and ice crystals. Hence radar does not sense clouds that do not produce rain.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Regional Stationarity in a Camera Network}
+\label{sec:station}
+
+Consider a network of sky-observing cameras, spread over a region. The location vector of camera $c$ is ${\bf l}_c$. Any image pixel ${\bf x}$ of camera $c$ is backprojected to a ray at direction-angle vector (zenith, azimuth) ${\bm \theta}$ in a global coordinate system. The sampled light-field is the radiance measured per location, direction and time, thus given by $\tilde I_t[{\bf l}_c,{\bm \theta}(\bf x)]$.
+
+An interesting assumption that can be made is {\em regional stationarity}. In a region containing the cameras, the chance of a cloud, clear sky, or haziness affecting $\tilde I_t[{\bf l}_c,{\bm \theta}]$ is {\em independent} of $c$. Thus, inter-camera image variations due to atmospheric conditions are {\em random and unbiased}. This is illustrated in Fig.~\ref{fig:station}.
+\begin{figure}[t!]
+  \begin{center}
+    \includegraphics[width=\linewidth]{figures/regional_stationarity.eps}
+  \end{center}
+  \vspace{-0.6cm}
+  \caption{  %[a] and [b] show the network at times $t_1$ and $t_2$ respectively.
+    Regional stationarity means that in a wide
+    region, objects at infinity and the background
+    sky should have the same color, for a common viewing angle ${\bm
+      \theta}$, e.g.,
+%    $\tilde I_{t_1}[{\bf l}_a,{\bm \theta}]$ vs. $I_{t_1}[{\bf l}_c,{\bm \theta}]$.
+    $[{\bf l}_a,{\bm \theta}]$ vs. $[{\bf l}_c,{\bm \theta}]$ at $t_1$.
+    Nearby objects (clouds) result in pixel differences, e.g.,
+    $[{\bf l}_b,{\bm \theta}]$ vs. $[{\bf l}_c,{\bm \theta}]$ at $t_1$.
+    Nevertheless, the light-field statistics (spatio-temporal variations and correlations) are stationary across viewpoints. This enables statistical processing  across viewpoints and time.  Residual measured bias is
+    attributed to slight inter-camera radiometric inconsistencies.  }
+  \label{fig:station}
+\end{figure}
+
+Some monocular algorithms tend to rely on gathering statistics over time, thus assuming temporal stationarity. Nevertheless, {\em simultaneous} images captured by {\em different camera nodes} are generally different from each other. Due to regional stationarity, a change of viewpoint has an effect similar to change in time: a cloud in
+$\tilde I_t[{\bf l}_c,{\bm \theta}]$ is often not in $\tilde I_t[{\bf l}_{c'},{\bm \theta}]$. Consequently, monocular algorithms can be extended to statistics gathered over both time and viewpoint, as we show. 
 
 
 
@@ -105,17 +133,15 @@ that are too sparse to be integrated for recovery.} are few, relying on high qua
 \section{Self-Calibration in a Camera Network}
 \label{sec:muticalib}
 
-Even in high grade equipment, there are generally radiometric inconsistencies between cameras. Hence, the same distant object has slightly different intensity readouts for different cameras. This problem may exacerbate in low-cost cameras, which have loose quality control. A large light-field network would need to use many such cameras. Estimating and compensating for inter-camera differences is helpful for subsequent computer vision algorithms. Consistency is necessary for radiometric-based tasks, such as tomography~\cite{Aides:13}.
-%However, it also assists non-radiometric, higher level tasks. For example, consider cloud segmentation. Segmentation (which may rely on image-value thresholds) has to be as consistent as possible across different viewpoints, otherwise contradictions may arise.
- Similarly to Sec.~\ref{sec:Signelradio}, the solution relies on redundant measurement at {\em corresponding} points.   For correspondence, geometric calibration~\cite{Seiz2002} is a first necessity, which is treated in Sec.~\ref{sec:geometry}.
+Before each camera is deployed in the field, its internal geometric and radiometric characteristics (including distortions, radiometric response) are calibrated in the lab. This is done using established monocular methods. However, once the camera is placed in the field, we need to estimate unknown parameters. External light sources in the vicinity of a camera may create a weak lens glare, that {\em offsets} radiometric readings, in way that varies both spatially and across viewpoints. Moreover, residual {\em gain} variations may be between different cameras, despite lab calibration. This may be exacerbated in the field due to dirt accumulated on the lenses. A large light-field network would need to use many cameras. Estimating and compensating for inter-camera differences is helpful for subsequent computer vision algorithms. Consistency is necessary for radiometry-based tasks, such as tomography~\cite{Aides:13}. In this section we describe a solution. Similarly to Sec.~\ref{sec:Signelradio}, the solution relies on redundant measurement at {\em corresponding} points.  For correspondence, geometric calibration~\cite{Seiz2002} is a first necessity, which is treated in Sec.~\ref{sec:geometry}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Geometric calibration}
 \label{sec:geometry}
 
-The cameras are deployed in the field. The location vector ${\bf l}_c$
-of each camera $c$ is known by GPS, and the internal parameters $\Psi_c$ are pre-calibrated in the lab. However, the orientation (yaw, pitch and roll angle vector ${\bf \Theta}_c$) is loosely set, as the camera is placed in the field. The orientation is calibrated by automatically detecting and tracking extra-terrestrial (XT) objects (Moon, planets, Sun)~\cite{Seiz2002,lalonde}, across night or day\footnote{In~\cite{Seiz2002}, calibration relied on manual tracking of a special flight and long exposures at night.} in the hemispherical field of view.  Using astronomical charts per time $t$ and ${\bf l}_c$, an XT object is known to be at angle vector (zenith, azimuth) ${\bm \theta}^{\rm XT}(t)$ relative to a global coordinate system. Given camera orientation ${\bf \Theta}_c$, a ray from ${\bm \theta}^{\rm XT}(t)$ should project to pixel:
+The internal parameters $\Psi_c$ of camera $c$ are pre-calibrated in the lab. 
+In the field, the location vector ${\bf l}_c$ is known by GPS. However, the orientation (yaw, pitch and roll angle vector ${\bf \Theta}_c$) is loosely set in the field. The orientation is calibrated by automatically detecting and tracking extra-terrestrial (XT) objects (Moon, planets, Sun)~\cite{Seiz2002,lalonde}, across night or day\footnote{In~\cite{Seiz2002}, calibration relied on manual tracking of a special flight and long exposures at night.} in the hemispherical field of view.  Using astronomical charts per time $t$ and ${\bf l}_c$, an XT object is known to be at angle vector (zenith, azimuth) ${\bm \theta}^{\rm XT}(t)$ relative to a global coordinate system. Given camera orientation ${\bf \Theta}_c$, a ray from ${\bm \theta}^{\rm XT}(t)$ should project to pixel:
 \begin{equation}
 {\bf x}^{\rm XT}_{\rm model}(t) = {\Pi}({\bm \theta}^{\rm XT}(t);{\bf \Theta}_c,\Psi_c)
 \;,
@@ -143,22 +169,80 @@ We solved it using exhaustive search or gradient descent from null initializatio
    }
 \label{fig:sunmotion}
 \end{figure}
-
-
-Based on $\hat{\bf \Theta}_c$, all captured images $\tilde I_{c,t}(\bf x)$ taken by camera $c$ are aligned to the global coordinate system. Any image pixel ${\bf x}$ of camera $c$ is backprojected to a ray at direction vector ${\bm \theta}$ in the global system, given by
+Based on $\hat{\bf \Theta}_c$, all captured images $\tilde I_{c,t}(\bf x)$ taken by camera $c$ are aligned to the global coordinate system: 
+%Any image pixel ${\bf x}$ of camera $c$ is 
+the backprojected ray has direction vector %${\bm \theta}({\bf x})$ is given by
 \begin{equation}
  {\bm \theta}({\bf x})={\Pi}^{-1}({\bf x};\hat{\bf{\Theta}}_c,\Psi_c)
   \;.
  \label{eq:thetac}
 \end{equation}
-The sampled light-field is the radiance measured per location, direction and time, thus given by
-$\tilde I_t[{\bf l}_c,{\bm \theta}(\bf x)]$.
+%The sampled light-field is the radiance measured per location, direction and time, thus given by
+%$\tilde I_t[{\bf l}_c,{\bm \theta}(\bf x)]$.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Inter-camera Relative Radiometric Self-Calibration}
+\label{sec:mutiradio}
+
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsection*{The Experimental Setup}
+%\label{sec:system}
+%
+
+Consider a {\em fixed} view direction ${\bm \theta}$ observed by several cameras.
+%, e.g., $c$ and $c'$.
+The values $\{\tilde I_t[{\bf l}_c,{\bm \theta}]\}_c$ correspond to readouts of parallel rays, back-projected from all cameras in the network. The values in this set generally differ from each other, e.g.,
+ $\tilde I_t[{\bf l}_c,{\bm \theta}]\neq \tilde I_t[{\bf l}_{c'},{\bm \theta}]$. There are two causes for this difference:\\
+ {\tt 1}.~ Different camera locations mean different observed objects. Momentarily, camera $c$ may observe a cloud while $c'$ observes a clear sky, or vice versa. Camera $c'$ may momentarily observe a somewhat denser haze volume than $c$, or vice versa. \\
+ {\tt 2}.~ Slight inter-camera radiometric inconsistencies, which we need to estimate.\\
+ \vspace{-0.2cm}
+
+Cause {\tt 1} is usually dominant. We need to overcome it, in order to analyze cause {\tt 2}. Here we rely on the regional stationarity described in Sec.~\ref{sec:station}.
+Per camera $c$ and view angle ${\bm \theta}$, bias is due to cause ({\tt 2}). We easily detect and characterize the bias by capturing {\em statistics over time}.
+
+
+We performed experiments, with a small field-deployed network, further detailed in Sec.~\ref{sec:set}. Consider, for example, Fig.~\ref{fig:calibration}a. It shows radiometric inconsistency between cameras $a$ and $b$. The figure then shows a scatter-plot of
+$\tilde I_t[{\bf l}_a,{\bm \theta}]$ vs.~$\tilde I_t[{\bf l}_{b},{\bm \theta}]$, $\forall t,{\bm \theta}$, for the red-channel.
+\begin{figure}[t!]
+\begin{center}
+   \includegraphics[width=\linewidth]{figures/bias4.eps}
+\end{center}
+   \vspace{-0.6cm}
+   \caption{[a] Splitting the field of view to upper/lower halves, to pixels corresponding
+   respectively to either $\tilde I_t[{\bf l}_a,{\bm \theta}]$  or $\tilde I_t[{\bf l}_{b},{\bm \theta}]$. In the line between the marked arrows, radiometric inconsistency shows-up as a seam across which colors slightly change ({\bf please view on a color computer screen}). [b] Scatter-plot of
+   $\tilde I_t[{\bf l}_a,{\bm \theta}]$ vs.~$\tilde I_t[{\bf l}_{b},{\bm \theta}]$, $~\forall t,{\bm \theta}$, red-channel. [c] The estimated offset map ${\hat o}_{b-a}({\bm \theta})$, red channel. It is derived based on a set of images taken during several hours.
+   [d]~Splitting the field of view in half, to {\em corrected} pixels from either
+   $\hat I_t[{\bf l}_a,{\bm \theta}]$  or $\hat I_t[{\bf l}_{b},{\bm \theta}]$: inconsistencies in the line between the marked arrows are greatly
+   diminished.
+   }
+\label{fig:calibration}
+\end{figure}
+From this scatter plot and those of the other color channels, we hypothesized that camera $a$ has a slight offset, particularly in the red channel, relative to camera $b$. We thus estimated, per color channel, the map of radiometric offset (across pixels, or ray-directions). A temporal median was used.
+\begin{equation}
+ {\hat o}_{b-a}({\bm \theta})=
+  {\rm median}_{t} \{\tilde I_t[{\bf l}_b,{\bm \theta}]-I_t[{\bf l}_a,{\bm \theta}]\}.
+ \label{eq:hato}
+\end{equation}
+The map ${\hat o}_{b-a}({\bm \theta})$ was then spatially smoothed and used to correct $\tilde I_t[{\bf l}_a,{\bm \theta}]$. As shown in Fig.~\ref{fig:calibration}, the results have much better inter-camera consistency. This is apparent in images taken throughout that day. A similar process was applied to other cameras, but they had negligible radiometric offsets with respect to camera $b$. Later, we realized that the spatially varying offset in camera $a$ was due to a red nearby light source.
+%Overall, it's important to note that the Radiometric calibration scheme described here does not claim to perform global Radiometric calibration(which can be performed a-priori on each camera), but aims at resolving relative Radiometric deviations caused in-situ by dirt or ...
+
+The process was then repeated to detect slight local variations of gain (vignetting). Suppose there is no offset. In analogy to Eq.~(\ref{eq:hato}), the gain in $b$ is higher than in $a$ by a factor
+\begin{equation}
+ {\hat M}_{b/a}({\bm \theta})=
+  {\rm median}_{t} \{\tilde I_t[{\bf l}_b,{\bm \theta}]/I_t[{\bf l}_a,{\bm \theta}]\}
+ \label{eq:hatm}
+\end{equation}
+Under this scheme, all the cameras in the network are radiometrically aligned to a single master camera.
+After radiometric corrections, the light-field samples are denoted $\hat I_t[{\bf l}_b,{\bm \theta}]$.
 
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Some Details About The Experimental Setup}
+\section{More Details About The Experimental Setup}
 \label{sec:set}
 
-Before proceeding with mathematical problems and solutions, we describe  a small experimental network, which we built to test the hypotheses. To show that it can work with very low-cost  camera nodes (units), each of the 5 units was built from basic components, and coarse alignment tolerances. Its core is a Raspberry-Pi computer used in DIY electronics, and a 5MP Raspberry-Pi camera. In this camera, the gain, response and white-balance can be fixed, avoiding temporal radiometric variations. We cut-off its OEM lens, and manually mounted a small fisheye lens. Due to this coarse lens-to-chip alignment, {\em each camera has a different peripheral dead-region}, creating a missing part in the hemispheric view-field and vignetting distinct to each camera. As derived below, a {\em {\em network} as-a-whole} can inherently overcome these issues. Every 30 seconds, synchronously, all units automatically transmit image data using the cellular network to the internet (cloud-service). Each unit is solar powered (Fig.~\ref{fig:photomotion}).
+Before proceeding with mathematical problems and solutions, we give more details about a small experimental network, which we built to test the hypotheses. To show that it can work with very low-cost  camera nodes (units), each of the 5 units was built from basic components, and coarse alignment tolerances. Its core is a Raspberry-Pi computer used in DIY electronics, and a 5MP Raspberry-Pi camera. In this camera, the gain, response and white-balance can be fixed, avoiding temporal radiometric variations. We cut-off its OEM lens, and manually mounted a small fisheye lens. Due to this coarse lens-to-chip alignment, {\em each camera has a different peripheral dead-region}, creating a missing part in the hemispheric view-field and vignetting distinct to each camera (seen in Fig.~\ref{fig:calibration}). As derived below, a {\em {\em network} as-a-whole} can inherently overcome these issues. Every 30 seconds, synchronously, all units automatically transmit image data using the cellular network to the internet (cloud-service). Each unit is solar powered (Fig.~\ref{fig:photomotion}).
 The units were placed on several rooftops and ran for weeks, capturing 70GB of sky imagery.
 %\begin{figure}[t!]
 %\begin{center}
@@ -181,94 +265,19 @@ The units were placed on several rooftops and ran for weeks, capturing 70GB of s
 \end{figure}
 
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Inter-camera Relative Radiometric Self-Calibration}
-\label{sec:mutiradio}
-
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\subsection*{The Experimental Setup}
-%\label{sec:system}
-%
-
-Consider a {\em fixed} view direction ${\bm \theta}$ observed by several cameras.
-%, e.g., $c$ and $c'$.
-The values $\{\tilde I_t[{\bf l}_c,{\bm \theta}]\}_c$ correspond to readouts of parallel rays, back-projected from all cameras in the network. The values in this set generally differ from each other, e.g.,
- $\tilde I_t[{\bf l}_c,{\bm \theta}]\neq \tilde I_t[{\bf l}_{c'},{\bm \theta}]$. There are two causes for this difference:\\
- {\tt 1}.~ Different camera locations mean different observed objects. Momentarily, camera $c$ may observe a cloud while $c'$ observes a clear sky, or vice versa. Camera $c'$ may momentarily observe a somewhat denser haze volume than $c$, or vice versa. \\
- {\tt 2}.~ Slight inter-camera radiometric inconsistencies, which we need to estimate.\\
- Cause {\tt 1} is usually dominant. We need to overcome it, in order to analyze cause {\tt 2}.
-
-The assumption we make is of {\em regional stationarity}. In a region containing the cameras, the chance of a cloud, clear sky, or haziness affecting $\tilde I_t[{\bf l}_c,{\bm \theta}]$ is {\em independent} of $c$. Thus, inter-camera image variations due to atmospheric conditions are {\em random and unbiased}. Per camera $c$ and view angle ${\bm \theta}$, bias is due to cause ({\tt 2}). We easily detect and characterize the bias by capturing {\em statistics over time}.
-\begin{figure}[t!]
-  \begin{center}
-    \includegraphics[width=\linewidth]{figures/regional_stationarity.eps}
-  \end{center}
-  \vspace{-0.6cm}
-  \caption{[a] and [b] show the same camera network at times $t_1$ and
-    $t_2$ respectively. The "regional stationarity"
-concept could be explained in more detail, objects at optical infinity (i.e. background
-    sky) should have the same color for a common viewing angle ${\bm
-      \theta}$ (e.g. $\tilde I_{t_1}[{\bf l}_a,{\bm \theta}]$ and
-    $I_{t_1}[{\bf l}_c,{\bm \theta}]$), whereas objects that are
-    closer (clouds) would show a parallax and therefore result in
-    pixel differences (e.g. $\tilde I_{t_1}[{\bf l}_b,{\bm \theta}]$
-    and $I_{t_1}[{\bf l}_c,{\bm \theta}]$). We can exclude the second
-    case using the statistical and camera independence of clouds
-    (e.g. $\tilde I_{t_1}[{\bf l}_b,{\bm \theta}]$ vs. $\tilde
-    I_{t_2}[{\bf l}_b,{\bm \theta}]$). Any residual bias can be
-    attributed to the slight inter-camera radiometric inconsistencies
-    that we would like to estimate.  }
-  \label{fig:calibration}
-\end{figure}
-Consider, for example, Fig.~\ref{fig:calibration}a. It shows radiometric inconsistency between cameras $a$ and $b$. The figure then shows a scatter-plot of
-$\tilde I_t[{\bf l}_a,{\bm \theta}]$ vs.~$\tilde I_t[{\bf l}_{b},{\bm \theta}]$, $\forall t,{\bm \theta}$, for the red-channel.
-\begin{figure}[t!]
-\begin{center}
-   \includegraphics[width=\linewidth]{figures/bias4.eps}
-\end{center}
-   \vspace{-0.6cm}
-   \caption{[a] Splitting the field of view to upper/lower halves, to pixels corresponding
-   respectively to either $\tilde I_t[{\bf l}_a,{\bm \theta}]$  or $\tilde I_t[{\bf l}_{b},{\bm \theta}]$. In the line between the marked arrows, Radiometric inconsistency shows-up as a seam across which colors slightly change ({\bf please view on a color computer screen}). [b] Scatter-plot of
-   $\tilde I_t[{\bf l}_a,{\bm \theta}]$ vs.~$\tilde I_t[{\bf l}_{b},{\bm \theta}]$, $~\forall t,{\bm \theta}$, red-channel. [c] The estimated offset map ${\hat o}_{b-a}({\bm \theta})$, red channel. It is derived based on a set of images taken during several hours.
-   [d] Splitting the field of view in half, to {\em corrected} pixels from either
-   $\hat I_t[{\bf l}_a,{\bm \theta}]$  or $\hat I_t[{\bf l}_{b},{\bm \theta}]$: inconsistencies in the line between the marked arrows are greatly
-   diminished.
-   }
-\label{fig:calibration}
-\end{figure}
-From this scatter plot and those of the other color channels, we hypothesized that camera $a$ has a slight offset, particularly in the red channel, relative to camera $b$. We thus estimated, per color channel, the map of radiometric offset (across pixels, or ray-directions). A temporal median was used.
-\begin{equation}
- {\hat o}_{b-a}({\bm \theta})=
-  {\rm median}_{t} \{\tilde I_t[{\bf l}_b,{\bm \theta}]-I_t[{\bf l}_a,{\bm \theta}]\}.
- \label{eq:hato}
-\end{equation}
-The map ${\hat o}_{b-a}({\bm \theta})$ was then spatially smoothed and used to correct $\tilde I_t[{\bf l}_a,{\bm \theta}]$. As shown in Fig.~\ref{fig:calibration}, the results have much better inter-camera consistency. This is apparent in images taken throughout that day. A similar process was applied to other cameras, but they had negligible radiometric offsets with respect to camera $b$. Later, it was obtained that cause for the severe Radiometric deviations of camera $a$ was a red led located near the sensor.
-Overall, it's important to note that the Radiometric calibration scheme described here does not claim to perform global Radiometric calibration(which can be performed a-priori on each camera), but aims at resolving relative Radiometric deviations caused in-situ by dirt or ...
-
-The process was then repeated to detect slight local variations of gain (vignetting). Suppose there is no offset. In analogy to Eq.~(\ref{eq:hato}), the gain in $b$ is higher than in $a$ by a factor
-\begin{equation}
- {\hat M}_{b/a}({\bm \theta})=
-  {\rm median}_{t} \{\tilde I_t[{\bf l}_b,{\bm \theta}]/I_t[{\bf l}_a,{\bm \theta}]\}
- \label{eq:hatm}
-\end{equation}
-Under this scheme all the cameras in the network are radiometrically aligned to a single master camera.
-After radiometric corrections, the light-field samples are denoted $\hat I_t[{\bf l}_b,{\bm \theta}]$.
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Network-assisted Background Estimation}
 \label{sec:background}
 
-It is often helpful to characterize the background, as motivated by change-detection computer vision algorithms. In monocular settings, such algorithms use temporal filtering to characterize the background\footnote{Physical sky appearance models~\cite{hosek2012analytic} require several atmospheric parameters that are unknown in our case, e.g. the aerosol distribution}: foreground dynamic objects are at {\em different locations at different times} and are thus pruned. In our case this translates to stating that a cloud in
+It is often helpful to characterize the background, as motivated by change-detection computer vision algorithms. In monocular settings, such algorithms use temporal filtering to characterize the background\footnote{Physics-based sky appearance models~\cite{hosek2012analytic} require several atmospheric parameters that are unknown in our case, e.g. the aerosol distribution.}: foreground dynamic objects are at {\em different locations at different times} and are thus pruned. In our case this translates to stating that a cloud in
 $\tilde I_t[{\bf l}_c,{\bm \theta}]$ is often not in
 $\tilde I_{t'}[{\bf l}_c,{\bm \theta}]$, when $t'\neq t$. However, if clouds move slowly, while illumination gradually changes, temporal filtering may be insufficient. This is illustrated in Fig.~\ref{fig:sky}.
 
-A light-field network enhances this principle, with more effective pruning-per-time. Here we demonstrate this idea by suggesting a simple yet effective background estimation method. Any other monocular state-of-the-art method of background estimation can be enhanced using the network approach. After calibration, {\em simultaneous} images captured by {\em different camera nodes} are different from each other. Thus, change of viewpoint has an effect similar to change in time: a cloud in
-$\tilde I_t[{\bf l}_c,{\bm \theta}]$ is often not in $\tilde I_t[{\bf l}_{c'},{\bm \theta}]$. This principle relies on the {\em regional stationarity} mentioned above. Consequently, background sky values are obtained by data filtering over both time and viewpoint.
+A light-field network enhances this principle, with more effective pruning-per-time. 
+Recall regional stationarity (Sec.~\ref{sec:station}). A change of viewpoint has an effect similar to change in time: a cloud in
+$\tilde I_t[{\bf l}_c,{\bm \theta}]$ is often not in $\tilde I_t[{\bf l}_{c'},{\bm \theta}]$. Consequently, background sky values are obtained by data filtering over {\em both} time and viewpoint.
 
-In broad daylight, clouds are brighter than the blue sky. Hence, as an example, an estimator for the sky background can be:
+This network-based principle can generally enhance any state-of-the-art (or future) algorithm of background estimation, which would otherwise be monocular. For a quick demonstration, we show results using a simplistic, basic criterion. In broad daylight, clouds are brighter than the blue sky. Hence, as an example, an estimator for the sky background can be:
 \begin{equation}
  {\rm SKY}({\bm \theta})= \arg\min_{t,c} \tilde I_t[{\bf l}_c,{\bm \theta}]
  \label{eq:SKY}
