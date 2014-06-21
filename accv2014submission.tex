@@ -46,12 +46,12 @@ Light-field imaging can be scaled up to continental size, to map the Earth's atm
 \section{Introduction}
 
 Following the introduction of plenotic imaging to computer vision~\cite{Adelson1992}, light-field imaging~\cite{Basha2012,bishop,horstmeyer,Ng1948,kim} has had a significant impact on sensing. This modality samples the radiance distribution in location and direction. It has so far been used mainly in small-scale setups. However, it can be scaled up to continental size, to map the Earth's atmosphere in 3D. Sampling the atmospheric radiance spatio-angularly is achieved by a few spaceborne and airborne instruments, including the Multiangle Imaging SpectroRadiometer (MISR)~\cite{diner,Diner1998}, the Airborne Multiangle SpectroPolarimetric Imager (AirMSPI)~\cite{dinerDavis07,dinerDavis10} and POLDER~\cite{baxter,breon,vanMol}.
-However, these imaging architectures suffer several drawbacks. They have crude resolution spatially (effectively several kilometers per pixel), angularly  ($\approx 7$ angles per view), and temporally (orbit takes several days to return to the same terrestrial spot). Furthermore, spaceborne instruments are extremely expensive and unscalable. Hence, in this work we develop a counter approach: the atmospheric lightfield is captured {\em from below}, by wide-angle cameras {\em looking upwards}. Moreover, instead of expensive one-off instruments, our approach is a {\em scalable sensor network} that captures images simultaneously over a very large area, densely.
+However, these imaging architectures suffer from several drawbacks. They have crude resolution spatially (effectively several kilometers per pixel), angularly  ($\approx 7$ angles per view), and temporally (orbit takes several days to return to the same terrestrial spot). Furthermore, spaceborne instruments are extremely expensive and unscalable. Hence, in this work we develop a counter approach: the atmospheric lightfield is captured  from below, by wide-angle cameras looking upwards. Moreover, instead of expensive one-off instruments, our approach is a {\em scalable sensor network} that captures images simultaneously over a very large area, densely.
 
 Creating and exploiting such a light-field imaging-network poses several requirements: low-cost units,
-communications, and {\em tailored computational photography algorithms}. The first two requirements are met  thanks to cellular-network infrastructure, cellular-based low-cost cameras and {\em cloud computing} services. Hence, we can deploy solar-powered cameras at will, nearly anywhere. By wireless, they upload their sky-images to the ``cloud'', from which the light-field data can be analyzed. However, this new type of imaging-system gives rise to new problems and algorithms, part of which we deal with in this paper. In a sense, the network {\em generalizes some computer vision problems} that had been posed for monocular setups a decade ago. On the other hand, network redundancy offers {\em solutions} to these problems.
+communications, and {\em tailored computational photography algorithms}. The first two requirements are met  thanks to cellular-network infrastructure, cellular-based low-cost cameras and {\em cloud computing} services. Hence, we can deploy solar-powered cameras at will, nearly anywhere. By wireless, they upload their sky-images to the ``cloud'', from which the light-field data can be analyzed. However, this new type of imaging-system gives rise to new problems and algorithms, part of which we deal with in this paper. In a sense, the network generalizes some computer vision problems that had been posed for monocular setups a decade ago. On the other hand, network redundancy offers {\em solutions} to these problems.
 
-The computational photography problems include radiometric self-calibration across a network of cameras, background estimation, and overcoming saturation and flare by a network. Consequently, the light-field network enables unprecedented 3D imaging of clouds, in high spatio-temporal resolution. This is achieved by {\em space carving} in a {\em volumetric distribution} of semi-transparent clouds. We demonstrate the approach using real field experiments. As a result, we believe this approach can complement multi-angular satellite cloud imagery, perhaps make aerosol tomography~\cite{Aides:13} realizable, and offer new capabilities to study weather phenomena and birds.
+The computational photography problems include radiometric self-calibration across a network of cameras, background estimation, and overcoming saturation and flare by a network. Consequently, the light-field network enables unprecedented 3D imaging of clouds, in high spatio-temporal resolution.  We demonstrate the approach using real field experiments. As a result, we believe this approach can complement multi-angular satellite cloud imagery, perhaps make aerosol tomography~\cite{Aides:13} realizable, and offer new capabilities to study weather phenomena and birds.
 
 
 
@@ -64,7 +64,7 @@ The computational photography problems include radiometric self-calibration acro
 \subsection{Monocular radiometric self-calibration}
 \label{sec:Signelradio}
 
-A large network should use low-cost camera units. Such cameras often have spatial and temporal radiometric inconsistencies. For a single camera, consistent readouts can be obtained in the field by self-calibration. The strongest methods rely on redundant images, taken at different settings. In particular, images taken at different exposure times calibrate the radiometric response, up to a global scale factor. Images taken during slow panning yield spatial non-uniformity correction (NUC) of offset and gain (e.g., by vignetting~\cite{LitvinovCVPR05,Kang2000}). For example, spatial gain is often modeled by a function $M({\bf x})$, where \mbox{${\bf x}=(x,y)$} is a camera pixel. Thus the image pixel irradiance at time $t$ is
+A large network should use low-cost camera units. Such cameras often have spatial and temporal radiometric inconsistencies. For a single camera, consistent readouts can be obtained in the field by self-calibration. The strongest methods rely on redundant images, taken at modulated settings. In particular, images taken during slow panning yield spatial non-uniformity correction (NUC) of offset and gain (e.g., by vignetting~\cite{LitvinovCVPR05,Kang2000}). For example, spatial gain is often modeled by a function $M({\bf x})$, where \mbox{${\bf x}=(x,y)$} is a camera pixel. Thus the image pixel irradiance at time $t$ is
 \begin{equation}
  \tilde{I}_t({\bf x}) = M({\bf x})I_t(O) \;,
  \label{eq:tilde_I}
@@ -83,7 +83,7 @@ Aggregating such constraints over different pixels and frames recovers $M({\bf x
 \subsection{Avoiding Blooming, Lens-Flare in a Single Camera}
 \label{sec:Signelflare}
 
-In a wide-angle sky-viewing camera, sun-rays are liable to frequently shine directly into the lens. This can create problems, including saturation and blooming even in high-dynamic range setups. Moreover, sun-rays create an additive, spatially varying lens-flare. Reducing lens flare was suggested~\cite{Koreban2009,Raskar2008,Talvala2007,Rouf2011}, using either a specialized detector array for nearby objects, or by camera rotation during imaging of a static scene. Both approaches complicate the need for simple, low-cost units and operation.
+In a wide-angle sky-viewing camera, sun-rays are liable to frequently shine directly into the lens. This can create blooming. Moreover, sun-rays create an additive, spatially varying lens-flare. Reducing lens flare was suggested~\cite{Koreban2009,Raskar2008,Talvala2007,Rouf2011}, using either a specialized detector array for nearby objects, or by camera rotation during imaging of a static scene. Both approaches complicate the need for simple, low-cost units and operation.
 %Third, direct sunlight repeatedly entering the camera chamber and hitting pixels may damage the camera after a while.
 
 Consequently, sky-observing wide-field cameras often have a {\em dynamic sun blocker}. It is essentially an opaque object raised above the camera optics, blocking the Sun from view. There are various configurations, but all of them {\em move}, as the Sun direction changes during the day and across the year. Motorized solutions~\cite{Pust2008} that need to work year-around significantly complicate such camera units, making them very expensive. In Sec.~\ref{sec:mutiSun} explains that a large camera network inherently bypasses the problem, without a need to constantly move a Sun blocker.
@@ -105,7 +105,7 @@ that are too sparse to be integrated for recovery.} are few, relying on high qua
 \section{Self-Calibration in a Camera Network}
 \label{sec:muticalib}
 
-Even in high grade equipment, there are generally radiometric inconsistencies between cameras. Hence, the same distant object has slightly different intensity readouts for different cameras. This problem may exacerbate in low-cost cameras, which have loose quality control. A large light-field network would need to use many such cameras. Estimating and compensating for inter-camera differences is helpful for subsequent computer vision algorithms. It is clear that radiometric consistency would be necessary for radiometric-based tasks, such as tomography~\cite{Aides:13}.
+Even in high grade equipment, there are generally radiometric inconsistencies between cameras. Hence, the same distant object has slightly different intensity readouts for different cameras. This problem may exacerbate in low-cost cameras, which have loose quality control. A large light-field network would need to use many such cameras. Estimating and compensating for inter-camera differences is helpful for subsequent computer vision algorithms. Consistency is necessary for radiometric-based tasks, such as tomography~\cite{Aides:13}.
 %However, it also assists non-radiometric, higher level tasks. For example, consider cloud segmentation. Segmentation (which may rely on image-value thresholds) has to be as consistent as possible across different viewpoints, otherwise contradictions may arise.
  Similarly to Sec.~\ref{sec:Signelradio}, the solution relies on redundant measurement at {\em corresponding} points.   For correspondence, geometric calibration~\cite{Seiz2002} is a first necessity, which is treated in Sec.~\ref{sec:geometry}.
 
@@ -115,7 +115,7 @@ Even in high grade equipment, there are generally radiometric inconsistencies be
 \label{sec:geometry}
 
 The cameras are deployed in the field. The location vector ${\bf l}_c$
-of each camera $c$ is known by GPS, and the internal parameters $\Psi_c$ are pre-calibrated in the lab. However, the orientation (yaw, pitch and roll angle vector ${\bf \Theta}_c$) is loosely set, as the camera is placed in the field. We calibrate the orientation by automatically detecting and tracking extra-terrestrial (XT) objects (Sun and/or Moon)~\cite{Seiz2002,lalonde}, across day or night\footnote{In~\cite{Seiz2002}, calibration relied on manual tracking of a special flight and long exposures at night.} in the hemispherical field of view.  Using astronomical charts per time $t$ and ${\bf l}_c$, an XT object is known to be at angle vector (zenith, azimuth) ${\bm \theta}^{\rm XT}(t)$ relative to a global coordinate system. Given camera orientation ${\bf \Theta}_c$, a ray from ${\bm \theta}^{\rm XT}(t)$ should project to pixel:
+of each camera $c$ is known by GPS, and the internal parameters $\Psi_c$ are pre-calibrated in the lab. However, the orientation (yaw, pitch and roll angle vector ${\bf \Theta}_c$) is loosely set, as the camera is placed in the field. The orientation is calibrated by automatically detecting and tracking extra-terrestrial (XT) objects (Moon, planets, Sun)~\cite{Seiz2002,lalonde}, across night or day\footnote{In~\cite{Seiz2002}, calibration relied on manual tracking of a special flight and long exposures at night.} in the hemispherical field of view.  Using astronomical charts per time $t$ and ${\bf l}_c$, an XT object is known to be at angle vector (zenith, azimuth) ${\bm \theta}^{\rm XT}(t)$ relative to a global coordinate system. Given camera orientation ${\bf \Theta}_c$, a ray from ${\bm \theta}^{\rm XT}(t)$ should project to pixel:
 \begin{equation}
 {\bf x}^{\rm XT}_{\rm model}(t) = {\Pi}({\bm \theta}^{\rm XT}(t);{\bf \Theta}_c,\Psi_c)
 \;,
@@ -139,8 +139,8 @@ We solved it using exhaustive search or gradient descent from null initializatio
    \vspace{-0.6cm}
    \caption{(a) To estimate the camera yaw-pitch-roll angle vector ${\bf \Theta}_c$, we rely on
    image locations of extra-terrestrial objects, whose direction vector ${\bm \theta}^{\rm XT}(t)$
-   is known for all time $t$. (b) Photo-montage of the daylight sky. It shows the Sun at different hours, the expected trajectory based on the estimated ${\bf \Theta}_c$ and lens-flares. (c)
-   Photo-montage of night sky images. It shows the Moon at different times, the expected trajectory based on the estimated ${\bf \Theta}_c$, and a close-up on the corresponding sampled images of Jupiter.}
+   is known for all time $t$. (b) Photo-montage of night sky images. It shows the Moon at different times, the expected trajectory based on the estimated ${\bf \Theta}_c$, and a close-up on the corresponding sampled images of Jupiter. (c) Photo-montage of the daylight sky. It shows the Sun at different hours, the expected trajectory based on the estimated ${\bf \Theta}_c$ and lens-flares.
+   }
 \label{fig:sunmotion}
 \end{figure}
 
@@ -158,7 +158,7 @@ $\tilde I_t[{\bf l}_c,{\bm \theta}(\bf x)]$.
 \section{Some Details About The Experimental Setup}
 \label{sec:set}
 
-Before proceeding with mathematical problems and solutions, we describe  a small experimental network, which we built to test the hypotheses. To show that it can work with very low-cost  camera nodes (units), each of the 5 units was built from basic components, and coarse alignment tolerances. Its core is a Raspberry-Pi computer used in DIY electronics, and a 5MP Raspberry-Pi camera. In this camera, the gain, response and white-balance can be fixed, avoiding temporal radiometric variations. We cut-off its OEM lens, and manually mounted a small fisheye lens. Due to this coarse lens-to-chip alignment, {\em each camera has a different peripheral dead-region}, creating a missing part in the hemispheric view-field and vignetting distinct to each camera. As derived below, a {\em {\bf network} as-a-whole} can inherently overcome these issues. Every 30 seconds, synchronously, all units automatically transmit image data using the cellular network to the internet (cloud-service). Each unit is solar powered (Fig.~\ref{fig:photomotion}).
+Before proceeding with mathematical problems and solutions, we describe  a small experimental network, which we built to test the hypotheses. To show that it can work with very low-cost  camera nodes (units), each of the 5 units was built from basic components, and coarse alignment tolerances. Its core is a Raspberry-Pi computer used in DIY electronics, and a 5MP Raspberry-Pi camera. In this camera, the gain, response and white-balance can be fixed, avoiding temporal radiometric variations. We cut-off its OEM lens, and manually mounted a small fisheye lens. Due to this coarse lens-to-chip alignment, {\em each camera has a different peripheral dead-region}, creating a missing part in the hemispheric view-field and vignetting distinct to each camera. As derived below, a {\em {\em network} as-a-whole} can inherently overcome these issues. Every 30 seconds, synchronously, all units automatically transmit image data using the cellular network to the internet (cloud-service). Each unit is solar powered (Fig.~\ref{fig:photomotion}).
 The units were placed on several rooftops and ran for weeks, capturing 70GB of sky imagery.
 %\begin{figure}[t!]
 %\begin{center}
@@ -183,7 +183,7 @@ The units were placed on several rooftops and ran for weeks, capturing 70GB of s
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Inter-camera Relative Radiometric Self-Calibration}
+\section{Inter-camera Relative Radiometric Self-Calibration}
 \label{sec:mutiradio}
 
 %
@@ -200,7 +200,7 @@ The values $\{\tilde I_t[{\bf l}_c,{\bm \theta}]\}_c$ correspond to readouts of 
  {\tt 2}.~ Slight inter-camera radiometric inconsistencies, which we need to estimate.\\
  Cause {\tt 1} is usually dominant. We need to overcome it, in order to analyze cause {\tt 2}.
 
-The assumption we make is of {\em regional stationarity}. In a region containing the cameras, the chance of a cloud, clear sky, or haziness affecting $\tilde I_t[{\bf l}_c,{\bm \theta}]$ is {\em independent} of $c$. Thus, inter-camera image variations due to atmospheric conditions are {\em random and unbiased}. Per camera $c$ and view angle ${\bm \theta}$, bias is due to cause {\tt 2} (). We easily detect and characterize the bias by capturing {\em statistics over time}.
+The assumption we make is of {\em regional stationarity}. In a region containing the cameras, the chance of a cloud, clear sky, or haziness affecting $\tilde I_t[{\bf l}_c,{\bm \theta}]$ is {\em independent} of $c$. Thus, inter-camera image variations due to atmospheric conditions are {\em random and unbiased}. Per camera $c$ and view angle ${\bm \theta}$, bias is due to cause ({\tt 2}). We easily detect and characterize the bias by capturing {\em statistics over time}.
 \begin{figure}[t!]
 \begin{center}
    \includegraphics[width=\linewidth]{figures/regional_stationarity.eps}
@@ -218,11 +218,10 @@ $\tilde I_t[{\bf l}_a,{\bm \theta}]$ vs.~$\tilde I_t[{\bf l}_{b},{\bm \theta}]$,
 \end{center}
    \vspace{-0.6cm}
    \caption{[a] Splitting the field of view to upper/lower halves, to pixels corresponding
-   respectively to either $\tilde I_t[{\bf l}_a,{\bm \theta}]$  or $\tilde I_t[{\bf l}_{b},{\bm \theta}]$. Radiometric inconsistency
-   shows-up as a seam-line across which colors slightly change. [b] Scatter-plot of
+   respectively to either $\tilde I_t[{\bf l}_a,{\bm \theta}]$  or $\tilde I_t[{\bf l}_{b},{\bm \theta}]$. In the line between the marked arrows, Radiometric inconsistency shows-up as a seam across which colors slightly change ({\bf please view on a color computer screen}). [b] Scatter-plot of
    $\tilde I_t[{\bf l}_a,{\bm \theta}]$ vs.~$\tilde I_t[{\bf l}_{b},{\bm \theta}]$, $~\forall t,{\bm \theta}$, red-channel. [c] The estimated offset map ${\hat o}_{b-a}({\bm \theta})$, red channel. It is derived based on a set of images taken during several hours.
    [d] Splitting the field of view in half, to {\em corrected} pixels from either
-   $\hat I_t[{\bf l}_a,{\bm \theta}]$  or $\hat I_t[{\bf l}_{b},{\bm \theta}]$: inconsistencies are greatly
+   $\hat I_t[{\bf l}_a,{\bm \theta}]$  or $\hat I_t[{\bf l}_{b},{\bm \theta}]$: inconsistencies in the line between the marked arrows are greatly
    diminished.
    }
 \label{fig:calibration}
@@ -233,7 +232,8 @@ From this scatter plot and those of the other color channels, we hypothesized th
   {\rm median}_{t} \{\tilde I_t[{\bf l}_b,{\bm \theta}]-I_t[{\bf l}_a,{\bm \theta}]\}.
  \label{eq:hato}
 \end{equation}
-The map ${\hat o}_{b-a}({\bm \theta})$ was then spatially smoothed and used to correct $\tilde I_t[{\bf l}_a,{\bm \theta}]$. As shown in Fig.~\ref{fig:calibration}, the results have much better inter-camera consistency. This is apparent in images taken throughout that day. A similar process was applied to other cameras, but they had negligible radiometric offsets with respect to camera $b$.
+The map ${\hat o}_{b-a}({\bm \theta})$ was then spatially smoothed and used to correct $\tilde I_t[{\bf l}_a,{\bm \theta}]$. As shown in Fig.~\ref{fig:calibration}, the results have much better inter-camera consistency. This is apparent in images taken throughout that day. A similar process was applied to other cameras, but they had negligible radiometric offsets with respect to camera $b$. Later, it was obtained that cause for the severe Radiometric deviations of camera $a$ was a red led located near the sensor.
+Overall, it's important to note that the Radiometric calibration scheme described here does not claim to perform global Radiometric calibration(which can be performed a-priori on each camera), but aims at resolving relative Radiometric deviations caused in-situ by dirt or ...
 
 The process was then repeated to detect slight local variations of gain (vignetting). Suppose there is no offset. In analogy to Eq.~(\ref{eq:hato}), the gain in $b$ is higher than in $a$ by a factor
 \begin{equation}
@@ -241,22 +241,22 @@ The process was then repeated to detect slight local variations of gain (vignett
   {\rm median}_{t} \{\tilde I_t[{\bf l}_b,{\bm \theta}]/I_t[{\bf l}_a,{\bm \theta}]\}
  \label{eq:hatm}
 \end{equation}
-Under this scheme we perform radiometric calibration for all the cameras with respect to some master camera.
-After radiometric corrections, the light-field samples are denoted hat $\hat I_t[{\bf l}_b,{\bm \theta}]$.
+Under this scheme all the cameras in the network are radiometrically aligned to a single master camera.
+After radiometric corrections, the light-field samples are denoted $\hat I_t[{\bf l}_b,{\bm \theta}]$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Network-assisted Background Estimation}
 \label{sec:background}
 
-It is often helpful to characterize the background, as motivated by change-detection computer vision algorithms. In monocular settings, such algorithms use temporal filtering to characterize the background\footnote{Physically-based sky appearance models~\cite{hosek2012analytic} can also be used for estimating the background. But these models usually require knowing several atmospheric parameters that are not known in our case, e.g. aerosol distribution}: foreground dynamic objects are at {\em different locations at different times} and are thus pruned. In our case this translates to stating that a cloud in
+It is often helpful to characterize the background, as motivated by change-detection computer vision algorithms. In monocular settings, such algorithms use temporal filtering to characterize the background\footnote{Physical sky appearance models~\cite{hosek2012analytic} require several atmospheric parameters that are unknown in our case, e.g. the aerosol distribution}: foreground dynamic objects are at {\em different locations at different times} and are thus pruned. In our case this translates to stating that a cloud in
 $\tilde I_t[{\bf l}_c,{\bm \theta}]$ is often not in
 $\tilde I_{t'}[{\bf l}_c,{\bm \theta}]$, when $t'\neq t$. However, if clouds move slowly, while illumination gradually changes, temporal filtering may be insufficient. This is illustrated in Fig.~\ref{fig:sky}.
 
-A light-field network enhances this principle, with more effective pruning-per-time. After calibration, {\em simultaneous} images captured by {\em different camera nodes} are different from each other. Thus, change of viewpoint has an effect similar to change in time: a cloud in
+A light-field network enhances this principle, with more effective pruning-per-time. Here we demonstrate this idea by suggesting a simple yet effective background estimation method. Any other monocular state-of-the-art method of background estimation can be enhanced using the network approach. After calibration, {\em simultaneous} images captured by {\em different camera nodes} are different from each other. Thus, change of viewpoint has an effect similar to change in time: a cloud in
 $\tilde I_t[{\bf l}_c,{\bm \theta}]$ is often not in $\tilde I_t[{\bf l}_{c'},{\bm \theta}]$. This principle relies on the {\em regional stationarity} mentioned above. Consequently, background sky values are obtained by data filtering over both time and viewpoint.
 
-In broad daylight, clouds are brighter than the blue sky. Hence, an estimator for the sky background is
+In broad daylight, clouds are brighter than the blue sky. Hence, as an example, an estimator for the sky background can be:
 \begin{equation}
  {\rm SKY}({\bm \theta})= \arg\min_{t,c} \tilde I_t[{\bf l}_c,{\bm \theta}]
  \label{eq:SKY}
@@ -268,8 +268,8 @@ This is illustrated in Fig.~\ref{fig:sky}.
    \includegraphics[width=0.5\linewidth]{figures/Background.eps}
 \end{center}
    \vspace{-0.6cm}
-   \caption{[Left] Estimation of the sky background, using Eq.~(\ref{eq:SKY}) based on 5 temporal
-   instances and 5 viewpoints. [Right] Estimation of the sky background, using 5 temporal
+   \caption{[Left] Estimation of the sky background, using Eq.~(\ref{eq:SKY}) based on five temporal
+   instances and five viewpoints. [Right] Estimation of the sky background, using five temporal
    instances, but just a single viewpoint, resulting in more residual clouds.}
 \label{fig:sky}
 \end{figure}
@@ -279,7 +279,7 @@ This is illustrated in Fig.~\ref{fig:sky}.
 \section{Bypassing the Sun through a Camera Network}
 \label{sec:mutiSun}
 
-As Sec.~\ref{sec:Signelflare} explains, in existing full sky-imagers, effects of direct sunlight are mitigated by a small dynamic sun-blocker, which complicates the system and its cost, while having a blind-region. The network offers a different solution, which can be radical, yet simple. On each camera, the sun-blocker is {\em static}, and has no moving part. The blocker can be large, covering the entire range of directions the Sun may occupy during the year or part of it. In this configuration, each camera unit has a large blind area (See Fig.~\ref{fig:blindspot}). Nevertheless, the entire {\em network has no blind spot}, when viewing the atmosphere. This remarkable property is a result of network-redundancy, as we explain.
+As Sec.~\ref{sec:Signelflare} explains, in existing full sky-imagers, effects of direct sunlight are often mitigated by a small dynamic sun-blocker, which complicates the system and its cost, while having a blind-region. The network offers a different solution, which can be radical, yet simple. On each camera, the sun-blocker is {\em static}, and has no moving part. The blocker can be large, covering the entire range of directions the Sun may occupy during the year or part of it. In this configuration, each camera unit has a large blind area (See Fig.~\ref{fig:blindspot}). Nevertheless, the entire {\em network has no blind spot}, when viewing the atmosphere. This remarkable property is a result of network-redundancy, as we explain.
 \begin{figure}[t!]
 \begin{center}
    \includegraphics[width=0.8\linewidth]{figures/sun_blocks2.eps}
@@ -288,36 +288,35 @@ As Sec.~\ref{sec:Signelflare} explains, in existing full sky-imagers, effects of
    \caption{[a] Camera $c$ has a blind-region, covering Sun directions at ${\bf l}_c$. The blind region corresponds to set $\Gamma_c$ of atmospheric voxels not sensed by by camera $c$. The network as a whole still has coverage of voxels $k\in\Gamma_c$, as they are observed by cameras $e,f,g$.
    [b] Simulation of a whole sky image (polar azimuthal equidistant projection), blocking
    all solar directions during the year, at a mid-latitude.
-   [c] In the topics, the network must have units at distance $D$ outside surveyed area ${\cal A}$, if ${\cal A}$ is narrow.  It depends on the latitude $\gamma$, while
-   $\beta=23.5^o$.
-   [d] In the arctic, the blind region is adjacent to the horizon, in all azimuth angles. Hence a single sun-blocker for 24 hours creates blind regions for low-altitude voxels. [e] Arctic cameras fitted with a fixed north-facing sun blocker create a network
-   that operates 12 hours a day. An adjacent camera at each node has a fixed south-facing sun blocker, for imaging during complementing hours.
+   [c] In the topics, the network must have nodes at distance $D$ outside surveyed area ${\cal A}$, if ${\cal A}$ is narrow.  The distance D depends on the latitude $\gamma$, while
+   $\beta\approx23.5^o$.
+   [d] In the arctic, the blind region is adjacent to the horizon, in all azimuth angles. Fixed blocking of the Sun over $360^o$  blocks low-altitude voxel $k$. [e] Arctic cameras fitted with a fixed north-facing sun blocker create a network   that operates 12 hours a day. An adjacent camera at each node has a fixed south-facing sun blocker, for imaging during complementing hours.
    %For tropic cameras, the blind region dissects the field from east to west through the Zenith. In the arctic, the blind region is adjacent to the horizon.
    }
 \label{fig:blindspot}
 \end{figure}
 
 
-A static year-round sun blocker on camera $c$ permanently obstructs a set $\Gamma_c$ of atmospheric voxels. These voxels, however, are generally visible at several other cameras, e.g., those indexed $e,f,g$ in Fig.~\ref{fig:blindspot}. Consequently, a sufficiently wide network has no 3D blind spot, despite permanent sun-blocking. Voxels that are not obstructed from any camera have a few more viewpoints to constrain their content, than voxels in $\Gamma_c$.
+A static year-round sun blocker on camera $c$ permanently obstructs a set $\Gamma_c$ of atmospheric voxels. These voxels, however, are generally visible at several other cameras, e.g., those indexed $e,f,g$ in Fig.~\ref{fig:blindspot}. Consequently, a sufficiently wide network has no 3D blind spot, despite permanent sun-blocking. Voxels that are not obstructed from any camera have more viewpoints to constrain their content, than voxels in $\Gamma_c$.
 
 We now quantify the implication of this approach to the network extent, referring to the northern hemisphere without loss of generality.
-Nearly all weather phenomena are under the tropopause, whose altitude $H$ above sea level is typically 17km at the equator, and decreasing with latitude. The solar seasonal angle amplitude is $\beta=23.5^o$. At latitude $\gamma$, thus, a permanent sun blocker spans zenith angles in the range $\gamma\pm\beta$. Earth is divided here to three region classes:\\
-  ${\bf \bullet}$ In the tropics, the sky directly above the network is blocked. Consider
+Nearly all weather phenomena are under the tropopause, whose altitude $H$ above sea level is typically 17km at the equator, and decreasing with latitude. The solar seasonal angle amplitude is $\beta\approx23.5^o$. At latitude $\gamma$, thus, a permanent sun blocker spans zenith angles in the range $\gamma\pm\beta$. Earth is divided here to three region classes:\\
+  ${\bf \bullet}$ In the tropics, the sky directly above a camera is blocked. Consider
   a small tropical area ${\cal A}$, e.g., 1km wide, whose sky needs to be monitored. According to Fig.~\ref{fig:blindspot}c, ${\cal A}$ can efficiently be observed without
-  a blind spot by cameras to its {\em south}. The network needs to have camera units at distance  $D=H\tan(\beta-\gamma)+\epsilon$ from ${\cal A}$, where $\epsilon$ is a small distance, sufficient for triangulation at $H$. At the equator $D\approx7.4$km.
+  a blind spot by cameras to its {\em south}. The network needs to have camera units extending to distance  $D=H\tan(\beta-\gamma)+\epsilon$ from ${\cal A}$, where $\epsilon$ is a small distance, sufficient for triangulation at $H$. At the equator $D\approx7.4$km.
   It can also be shown that if ${\cal A}$ is wider than $2H[\tan(\beta-\gamma)+\tan(\beta+\gamma)]$, the network can observe and triangulate all the sky right above it.\\
-${\bf \bullet}$  As latitude increase towards the tropic latitudes, $D$ decreases to zero. Thus the network can observe and triangulate all the sky right above it, anywhere outside the tropics, in the mid-latitudes.\\
-  ${\bf \bullet}$ In the arctic and antarctic summer, the Sun can appear in all azimuth angles over the day. A single 24-hour fixed sun-blocker blocks the horizon,  so as shown in Fig.~\ref{fig:blindspot}d, voxel $k$ is not observed. One solution would be to mount two cameras, side by side, in each network node. Each camera in a node has a fixed sun blocker effective for 12 hours. One camera operates in the {\em polar daytime} (local 6AM to 6PM), as it has a south-oriented fixed blocker. The other camera operates in the complementing time (Fig.~\ref{fig:blindspot}e), having a north-oriented fixed blocker. This way, the network never has a blind spot.
+${\bf \bullet}$  As latitude increases towards the tropic circles, $D$ decreases to zero. Thus the network can observe and triangulate all the sky right above it, anywhere outside the tropics, in the mid-latitudes.\\
+  ${\bf \bullet}$ In the arctic and antarctic summer, the Sun can appear in all azimuth angles over the day. A single 24-hour fixed sun-blocker blocks the horizon. So as shown in Fig.~\ref{fig:blindspot}d, voxel $k$ is not observed. One solution would be to mount two cameras, side by side, in each network node. Each camera in a node has a fixed sun blocker effective covering half of the azimuth angles. One camera operates in the {\em polar daytime} (local 6AM to 6PM), as it has a south-oriented fixed blocker. The other camera operates in the complementing time (Fig.~\ref{fig:blindspot}e), having a north-oriented fixed blocker. This way, the network never has a blind spot.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{3D Clouds by a Camera Network}
 \label{sec:3Dc}
 
-Network-based acquisition and the processes described above, yield a calibrated sampled light-field of the sky. Using this light-field, we can estimate the 3D cloud structure above the network domain, and beyond. This is done by the following steps:~ %({\tt A})~Estimate the background;~
-({\tt A})~Per time $t$, give a {\rm cloud score} to each ray $[{\bf l}_c,{\bm \theta}]$, as we explain below.~({\tt B})~Perform a fuzzy version of space carving~\cite{Kutulakos2000,Ihrke2004} (reminiscent of back-projection in tomography).
+Network-based acquisition and the processes described above, yield a calibrated sampled light-field of the sky. Using this light-field, one application is to estimate the 3D cloud structure above the network domain, and beyond. This is done by the following steps:~ %({\tt A})~Estimate the background;~
+({\tt A})~Per time $t$, give a {\rm cloud score} $s$  to each ray $[{\bf l}_c,{\bm \theta}]$, as we explain below.~({\tt B})~Perform a fuzzy version of space carving~\cite{Kutulakos2000,Ihrke2004} (reminiscent of back-projection in tomography).
 
-We first describe ({\tt B}).  The set of all sampled light-field rays is ${\cal R}$, where
+We first describe a simple yet effective method to implement ({\tt B}).  The set of all sampled light-field rays is ${\cal R}$, where
 \mbox{$|{\cal R}|=N^{\rm rays}$}. A ray is indexed by $r$, and it corresponds to a specific $[{\bf l}_c,{\bm \theta}]$. Voxel $k$ projects to a subset of the rays $\rho_k\subset{\cal R}$,
 that reach $\nu_k$ viewpoints. Suppose a ray $r\in{\cal R}$ has a cloud-score $s(r)\in[0,1]$, where $s=0$ means there is definitely no cloud on the ray, while $s=1$ means there is confidently a cloud there. Per voxel $k$, define a back-projected score
 \begin{equation}
@@ -330,9 +329,9 @@ The back-projected score of voxel $k$ is null, if $k$ is not observed by at leas
 
 Different cloud regions have signature appearances. Ignoring this would wrongly allow matching of, say, a darker cloud-bottom to a bright sun-lit side of a cloud, or a smooth cloud region to a textured one. Thus, photometric and appearance consistency across viewpoints is incorporated (the photo-hull concept in space-carving~\cite{Kutulakos2000}). Clouds are diffuse, cooperating with this requirement.
 From the images, a feature vector ${\bf v}(r,t)$ is extracted for any measured ray $r$.
-We used SIFT descriptors~\cite{lowe2004distinctive} and the radiance in the each color channel. Element $q$ of ${\bf v}(r,t)$ is $v_q(r,t)$. The values of this element, for all rays that intersect voxel $k$, is \mbox{${\cal V}_q(k,t)\equiv\{v_q(r,t)\}_{r\in\rho_k}$}.
+We used SIFT descriptors~\cite{lowe2004distinctive} and the radiance in each color channel. Element $q$ of ${\bf v}(r,t)$ is $v_q(r,t)$. The values of this element, for all rays that intersect voxel $k$, is \mbox{${\cal V}_q(k,t)\equiv\{v_q(r,t)\}_{r\in\rho_k}$}.
 Across viewpoints, the measured variance in this set is
-${\rm VAR}[{\cal V}_q(k,t)]$. Define an appearance consistency score as
+${\rm VAR}[{\cal V}_q(k,t)]$. Define an appearance consistency score~\cite{Supp2014} as
 \begin{equation}
  P_k= \exp\left(
          -\Sigma_q\{[{\cal V}_q(k,t)]\}/\sigma^2
