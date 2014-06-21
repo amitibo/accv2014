@@ -25,8 +25,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2"
-     inkscape:cx="301.12021"
-     inkscape:cy="191.53944"
+     inkscape:cx="187.85836"
+     inkscape:cy="124.2402"
      inkscape:document-units="px"
      inkscape:current-layer="layer8"
      showgrid="true"
@@ -2908,9 +2908,9 @@
      inkscape:label="analysis"
      transform="translate(1.5879439e-7,-2.4298668e-6)">
     <rect
-       y="272.22583"
+       y="281.72583"
        x="245.74155"
-       height="73.910751"
+       height="64.410751"
        width="197.08858"
        id="rect3048-1-9-3"
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.68599999;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline" />
@@ -3248,7 +3248,7 @@
            height="62.142857"
            width="146.42857"
            id="rect5723-1-5-8" /></flowRegion><flowPara
-         id="flowPara5725-2-4-9">cam c</flowPara></flowRoot>    <path
+         id="flowPara5725-2-4-9">cam g</flowPara></flowRoot>    <path
        inkscape:connector-curvature="0"
        d="m 104.99132,202.03146 c 0,-3.93565 -0.56667,-3.93565 -0.94445,-3.93565 l -2.83336,0 c -0.94555,0.002 -0.94446,-2.22848 -0.94446,-3.93565 m -4.722271,7.87131 c 0,-3.93565 0.56668,-3.93565 0.94445,-3.93565 l 2.83337,0 c 0.945541,0.002 0.944451,-2.22848 0.944451,-3.93566"
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline"
@@ -3624,5 +3624,35 @@
            height="62.142857"
            width="146.42857"
            id="rect5723-1-5-8-6" /></flowRegion><flowPara
-         id="flowPara5725-2-4-9-5">cam c</flowPara></flowRoot>  </g>
+         id="flowPara5725-2-4-9-5">cam c</flowPara></flowRoot>    <path
+       transform="translate(3.9999998,2.4298668e-6)"
+       d="m 140.25,341.06448 a 0.875,0.875 0 1 1 -1.75,0 0.875,0.875 0 1 1 1.75,0 z"
+       sodipodi:ry="0.875"
+       sodipodi:rx="0.875"
+       sodipodi:cy="341.06448"
+       sodipodi:cx="139.375"
+       id="path3596"
+       style="fill:#000000;fill-opacity:1;stroke:none"
+       sodipodi:type="arc" />
+    <path
+       transform="translate(7.8749998,2.4298668e-6)"
+       d="m 140.25,341.06448 a 0.875,0.875 0 1 1 -1.75,0 0.875,0.875 0 1 1 1.75,0 z"
+       sodipodi:ry="0.875"
+       sodipodi:rx="0.875"
+       sodipodi:cy="341.06448"
+       sodipodi:cx="139.375"
+       id="path3598"
+       style="fill:#000000;fill-opacity:1;stroke:none"
+       sodipodi:type="arc" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#000000;fill-opacity:1;stroke:none"
+       id="path3594"
+       sodipodi:cx="139.375"
+       sodipodi:cy="341.06448"
+       sodipodi:rx="0.875"
+       sodipodi:ry="0.875"
+       d="m 140.25,341.06448 a 0.875,0.875 0 1 1 -1.75,0 0.875,0.875 0 1 1 1.75,0 z"
+       transform="translate(11.75,2.4298668e-6)" />
+  </g>
 </svg>
