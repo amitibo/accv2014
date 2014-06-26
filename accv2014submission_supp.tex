@@ -39,7 +39,7 @@ Supplementary Material}
 \section{Simulations}
 
 
-%------------------------------------------------------------------------- 
+%-------------------------------------------------------------------------
 \subsection{Setup}
 
 Quantitative assessments used atmospheric-science gold standard simulators.
@@ -71,7 +71,7 @@ converge to zero.
   \end{center}
 \end{figure}
 
-%------------------------------------------------------------------------- 
+%-------------------------------------------------------------------------
 \subsection{Results}
 
 \begin{figure}
@@ -86,7 +86,27 @@ converge to zero.
 %===========================================================
 \section{SIFT}
 
-TBD1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Spatial similarity score}
+\label{sec:appearancecore}
+
+During our experiments, we had found that simple color consistency was not enough when tackling difficult cloud structures such as high-altitude ciruss due to spatial ambiguity and very low baseline between the cameras. In such cases spatial information would be a natural way of incorporating a multi-view stereo approach into our space-carving scheme.
+To this end, we introduce an additional score-function $\{S_k\}$ which promotes  structural similarity between patches around the projected voxel.
+Dense SIFT~\cite{DenseSift2011} has recently been proven to be an efficient feature for non-rigid matching between pairs of images.
+In a similar manner, dense SIFT can be incorporated in our probablistic Space-Carving scheme together with the calor values to represent the appearance of a pgojected voxel. SIFT descriptors also give us the benefit of robustness under scale and view-angle variations.
+As in ~\cite{DenseSift2011}, 128-bin dense SIFT descriptors were chosen.
+Per voxel $k$, the set of measured radiances is \mbox{${\cal I}_t(k)\equiv\{\hat I_t(r)\}_{r\in\rho_k}$}. Across viewpoints, the measured variance of this set is ${\rm VAR}[{\cal I}_t(k)]$, per $t$. We define the spatial similarity score in a similar manner as was defined for the photo-consistency in Eq.10:
+\begin{equation}
+ P_k= \exp\left(
+         -\Sigma_{\rm bin}\{{\rm VAR}[{\cal SIFT}_t^{\rm bin}(k)]\}/\sigma'^2
+         \right)
+  \;,
+ \label{eq:Dist}
+\end{equation}
+where $\sigma'^2$ is a scale parameter, and $bin=\{1..128\}$. ${\rm VAR}[{\cal SIFT}_t^{\rm bin}(k)]$ computes the variance at each bin. Overall, the total cloud-score of a voxel is $T_k=B_kP_k$.
+Figure ... shows the reconstruction with and without the SIFT 
+
+
 
 
 
