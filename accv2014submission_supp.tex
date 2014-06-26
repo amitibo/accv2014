@@ -38,52 +38,77 @@ Supplementary Material}
 %===========================================================
 \section{Simulations}
 
+We used simulated data to test the camera network concept
+quantitatively and to scale it to large number of cameras. In this
+section we detail the simulation setup and results.
 
-%-------------------------------------------------------------------------
+% -------------------------------------------------------------------------
 \subsection{Setup}
 
-Quantitative assessments used atmospheric-science gold standard simulators.
-An atmosphere over $8\times8{\rm km}$  was produced using off-the-shelf large eddy simulation (LES), creating clouds between heights of $500{\rm m}$ to $1500{\rm m}$.
-Lighting conditions were consistent with Copenhagen (unrelated to the anonymous authors).
-Radiative transfer using the discrete ordinate spherical-harmonic method (SHDOM)~\cite{Evans1998} rendered images taken by 100 cameras placed in a $2.5\times 2.5{\rm km}^2$ domain. Recovery simulations used random subsets
-of the network, where the whole network is either with or without
-a sun blocker. In the LES, a voxel is occupied by cloud if its water-mass parameter is not null. In the recovery, voxel $k$ is classified as cloud if $T_k>0.01$.
-We measured the classification error rate, across all voxels.
-% Note that the LES example
-%details the  water particle distribution and therefore $B$ is calculated
-%as the voxels where the water content equals are surpasses some threshold.
-%The threshold we used was half the maximal water content in the example.
-%Due to this method we don't expect to achieve perfect reconstruction.
-The results are plotted in Fig.~\ref{fig:simulations}.  As expected of space carving,
-results improve fast from 2 to 10 cameras. Even when a sun blocker is applied,
-the algorithm is able to reconstruct the cloud formation. Then, as expected,
-more cameras are needed in order to compensate for the limited view of
-each camera. In our setup the cameras observe the clouds only from below. This is the classical limited
-angle problem known from visual hull and tomography algorithms. Therefore the reconstruction error does not
-converge to zero.
-\begin{figure}
-  \begin{center}
-    \includegraphics{figures/simulations.eps}
-    \caption{Classification error rate as a function of the number of
-    cameras. [Solid Blue] Without sun blocker. [Dashed Red] With sun blocker.
-    Fluctuations are within the random sampling standard deviation.}
-    \label{fig:simulations}
-  \end{center}
-\end{figure}
+Quantitative assessments used atmospheric-science gold standard
+simulators.  An atmosphere over $8\times8{\rm km}$ was produced using
+off-the-shelf large eddy simulation (LES), creating clouds between
+heights of $500{\rm m}$ to $1500{\rm m}$.  Lighting conditions were
+consistent with Copenhagen (unrelated to the anonymous authors).
+Radiative transfer using the discrete ordinate spherical-harmonic
+method (SHDOM)~\cite{Evans1998} rendered images taken by 100 cameras
+placed in a $2.5\times 2.5{\rm km}^2$ domain. Recovery simulations
+used random subsets of the network, where the whole network is either
+with or without a sun blocker. In the LES, a voxel is occupied by
+cloud if its water-mass parameter is not null. In the recovery, voxel
+$k$ is classified as cloud if $T_k>0.01$.  We measured the
+classification error rate, across all voxels.
+% Note that the LES example details the water particle distribution
+% and therefore $B$ is calculated as the voxels where the water
+% content equals are surpasses some threshold.  The threshold we used
+% was half the maximal water content in the example.  Due to this
+% method we don't expect to achieve perfect reconstruction.
+The results are plotted in Fig.~\ref{fig:simulations}.  As expected of
+space carving, results improve fast from 2 to 10 cameras. Even when a
+sun blocker is applied, the algorithm is able to reconstruct the cloud
+formation. Then, as expected, more cameras are needed in order to
+compensate for the limited view of each camera. In our setup the
+cameras observe the clouds only from below. This is the classical
+limited angle problem known from visual hull and tomography
+algorithms. Therefore the reconstruction error does not converge to
+zero.
 
-%-------------------------------------------------------------------------
+% -------------------------------------------------------------------------
 \subsection{Results}
 
 \begin{figure}
   \begin{center}
     \includegraphics{figures/simulation_imgs}
+    \caption{Images synthesised using SHDOM and used in the
+      reconstruction algorithm.  (a,b) Images of the same scene from
+      different cameras. The red rectangle marks the region of
+      interest of the reconstruction algorithm. (c,d) The same images
+      with the simulated sun-blocker applied.}
+    \label{fig:simulation_imgs1}
+  \end{center}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics{figures/clouds3d_SHDOM}
     \caption{Simulated clouds.}
-    \label{fig:simulation_imgs}
+    \label{fig:simulation_imgs2}
+  \end{center}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics{figures/simulations.eps}
+    \caption{Classification error rate as a function of the number of
+      cameras. [Solid Blue] Without sun blocker. [Dashed Red] With sun
+      blocker.  Fluctuations are within the random sampling standard
+      deviation.}
+    \label{fig:simulation}
   \end{center}
 \end{figure}
 
 
-%===========================================================
+% ===========================================================
 \section{SIFT}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
