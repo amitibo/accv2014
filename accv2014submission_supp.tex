@@ -35,7 +35,7 @@ Supplementary Material}
 
 \maketitle
 \begin{abstract}
-In the submitted paper we describe simulations and an appearance consistency measure that we used. The essence is in the paper, while in this supplemental documet we give more details and results.
+In the submitted paper we describe simulations and an appearance consistency measure that we used. The essence is in the paper, while in this supplemental document we give more details and results.
 
 \end{abstract}
 
@@ -75,24 +75,46 @@ We reconstructed the cloud distribution in the atmosphere above cameras. Fig.~\r
 \section{Appearance Consistency Score}
 \label{sec:appearancecore}
 
-Basic space carving is usually based on pointwise photo-consistency. As we explain in Sec.~8 of the submitted main paper, sometimes in clouds photo-consistency is not sufficiently discriminative. Dense SIFT~\cite{DenseSift2011} can be effective for non-rigid image matching. Similarly, dense SIFT can be incorporated into a space-carving scheme, to represent structural appearance of a projected voxel. SIFT is robust to scale and view-angle variations.
-Voxel $k$ projects to a subset of the rays $\rho_k\subset{\cal R}$,
-that reach $\nu_k$ viewpoints. 
-For each of the rays $r\in\rho_k$ at time $t$, we sample the 3 RGB values. Moreover, each ray $r$ corresponds to a pixel ${\bf x}$. From an $8 \times 8$ patch around ${\bf x}$, a 
-128-bin SIFT descriptor is extracted.
-The resulting feature vector ${\bf v}(r,t)$ is a weighted concatenation of the RGB values and the 128-bin SIFT vector.
+In Sec.~8 of the paper, we describe a matching criterion we used to demonstrate space carving of clouds. Here, we use the extra-space to give more details about it, to ease reproducibility.
 
-Appearance-consistency is measured by a simple sum of variances in the different components of the feature vectors:
+Basic space carving is usually based on pointwise photo-consistency. As we explain in Sec.~8 of the submitted main paper, in clouds photo-consistency is sometimes not sufficiently discriminative. Dense SIFT~\cite{liu2008sift} can be effective for non-rigid image matching. Similarly, dense SIFT can be incorporated into a space-carving scheme, to represent structural appearance of a projected voxel. SIFT is robust to scale and view-angle variations.
+Voxel $k$ projects to a subset of the rays $\rho_k\subset{\cal R}$.
+For each of ray $r\in\rho_k$, we measure the radiance $\hat I_t^{\chi}(r)$ (after correction for the radiometric non-uniformities), where
+ $\chi\in\{{\rm R,G,B}\}$ is the color-channel index. This forms a photometric vector ${\bf v}^{\rm phot}(r,t)=[\hat I^{\rm R}_t(r),\hat I^{\rm G}_t(r),\hat I^{\rm B}_t(r)]$, which is scaled globally to a unit bound.
+
+In addition, each ray $r$ corresponds to a pixel ${\bf x}$. From a %n $8 \times 8$
+patch around ${\bf x}$, a 128-bin SIFT descriptor is extracted~\cite{lowe1999object}, yielding a vector
+${\bf v}^{\rm SIFT}(r,t)$. Each such vector is normalized such that
+$\|{\bf v}^{\rm SIFT}(r,t)\|_1=1$. Overall, the feature vector we use is
+${\bf v}(r,t)=[{\bf v}^{\rm phot}(r,t), ~\mu{\bf v}^{\rm SIFT}(r,t)]$. Here $\mu$ determines the weight of SIFT vs. photometric descriptors. We have used $\mu=1/40$ throughout the experiment. Notice that the SIFT vector contains 40 times more values, so this choise of $\mu$ gives essentially equal power to the photometric and structural properties of the patch.
+
+Element $q$ of ${\bf v}(r,t)$ is $v_q(r,t)$. The values of this element, for all rays that intersect voxel $k$, form the set \mbox{${\cal V}_q(k,t)\equiv\{v_q(r,t)\}_{r\in\rho_k}$}.
+Across viewpoints, the measured variance in this set is
+${\rm VAR}[{\cal V}_q(k,t)]$.
+Appearance-consistency is based on summing the variances in the different components of the feature vectors:
 \begin{equation}
  P_k= \exp\left(
-         -\Sigma_q\{VAR[{\cal V}_q(k,t)]\}/\sigma^2
+         -\sum_{q=1}^{131}\{VAR[{\cal V}_q(k,t)]\}/\sigma^2
          \right)
   \;,
  \label{eq:Dist}
 \end{equation}
-where $q=\{1..131\}$ and $\sigma^2$ is a global scale parameter.
+Here $\sigma^2$ is a global scale parameter which is set to $\sigma^2=0.1$ throughout our experiments.
 
 
+\section{Additional experimental results}
+\label{sec:addexp}
+
+To further demonstrate our cloud reconstruction algorithm, we supply here an additional cloud reconstruction result. Fig.~\ref{fig:scene} shows the reconstruction result of a few clouds passing above the 5-camera setup.
+Also, a 3D illustration of the reconstruction result can bee seen in the attached movie.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics{figures/simulation_imgs}
+    \caption{(a,b) Two of the five cameras on the scene. (c,d) Cloud score map for the two cameras. (e) Cross-sections of the reconstructed cloud volume.}
+    \label{fig:scene}
+  \end{center}
+\end{figure}
 
 %===========================================================
 \bibliographystyle{splncs}
