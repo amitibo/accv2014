@@ -25,7 +25,7 @@
 \def\ACCV14SubNumber{215}  % Insert your submission number here
 
 %===========================================================
-\title{Clouds in The Cloud\\
+\title{Clouds in The Cloud:\\
 Supplementary Material}
 \titlerunning{ACCV-14 submission ID \ACCV14SubNumber - Supplementary Material}
 \authorrunning{ACCV-14 submission ID \ACCV14SubNumber - Supplementary Material}
@@ -34,108 +34,55 @@ Supplementary Material}
 \institute{Paper ID \ACCV14SubNumber}
 
 \maketitle
+\begin{abstract}
+In the submitted paper we describe simulations and an appearance consistency measure that we used. The essence is in the paper, while in this supplemental documet we give more details and results.
+
+\end{abstract}
 
 %===========================================================
 \section{Simulations}
 
-We used simulated data to test the camera network concept
-quantitatively and to scale it to large number of cameras. In this
-section we detail the simulation setup and results.
+In section 8 of the main paper we describe simulations, which enabled us to quantitatively assess performance of 3D cloud recovery. Here we give more details.
 
-% -------------------------------------------------------------------------
-\subsection{Setup}
-
-To synthesize cloud images we SHDOM~\cite{Evans1998}, a Radiative
-Transfer solver based on the discrete ordinate spherical-harmonic
-method. As input to the SHDOM we used a Liquid Water Content (LWC)
-field created by the UCLA Large-Eddy Simulation (LES)
-code~\cite{(stevens_evaluation_2005)}.  The LWC field spans
-$8000\times 8000 \time 1500{\rm m}^3$ grid and represents sparse
-Cumulus clouds heights of $500{\rm m}$ to $1500{\rm
-  m}^2$. Fig.~\ref{fig:simulation_imgs2}(a) shows a $2500 \times
-2500{\rm m}$ subset of the grid.  The solar zenith angle was set to
-$\frac{\pi}{4}$.  We synthesized images taken from 100 cameras placed
-on an evenly spaced grid over a $2500\times 2500{\rm m}^2$ domain.  We
-simulated a static Sun-blocker consistent with Copenhagen (unrelated
-to the anonymous authors) Latitude.
-
+An atmosphere over $8{\rm km}\times 8{\rm km}$  was produced using off-the-shelf UCLA large eddy simulation (LES)~\cite{stevens_evaluation_2005}. It created a field of liquid water content (LWC) per voxel, which represented clouds between heights of $500{\rm m}$ to $1500{\rm m}$. Fig.~\ref{fig:simulation_imgs2}(a) shows a $2.5\times 2.5\times 1.5{\rm km}^3$ subset of this atmosphere.
 \begin{figure}
   \begin{center}
     \includegraphics{figures/clouds3d_SHDOM}
-    \caption{Cloud reconstruction results: (a) The water liquid
-      distribution used as input to the SHDOM simulation. (b)
+    \caption{(a) The water liquid content distribution, showing clouds in the atmosphere.
+     This is a major input to SHDOM calculations. (b)
       Reconstructed clouds.}
     \label{fig:simulation_imgs2}
   \end{center}
 \end{figure}
+The LWC field then affected radiative transfer, calculated using the discrete ordinate spherical-harmonic method (SHDOM)~\cite{Evans1998}. The solar zenith angle was set to $\frac{\pi}{4}$.
 
-% -------------------------------------------------------------------------
-\subsection{Results}
-
-Figs.~\ref{fig:simulation_imgs1}(a,b) show images from two out of 100
-synthesized cameras. Figs.~\ref{fig:simulation_imgs1}(c,d) show the
-same images with the simulated Sun-blocker applied.
-Fig.~\ref{fig:simulation_imgs2}(b) shows the result of the
-reconstruction algorithm described in our article. We reconstructed
-only the cloud distribution in the atmosphere above cameras (marked by
-Red triangle in Figs.~\ref{fig:simulation_imgs1}(a,b)).
+Sun-angle parameters were consistent with Copenhagen (unrelated to the anonymous authors). Figs.~\ref{fig:simulation_imgs1}(a,b) show images from two out of 100
+synthesized cameras. The atmosphere above cameras is marked by red rectangles in Figs.~\ref{fig:simulation_imgs1}(a,b)). The applied static Sun-blocker is tailored to solar trajectories in Copenhagen (unrelated to the anonymous authors) latitude. Figs.~\ref{fig:simulation_imgs1}(c,d) show images using the simulated Sun-blocker.
+We reconstructed the cloud distribution in the atmosphere above cameras. Fig.~\ref{fig:simulation_imgs2}(b) shows one reconstruction result, as described in the main (submitted) paper.
 \begin{figure}
   \begin{center}
     \includegraphics{figures/simulation_imgs}
     \caption{Images synthesised using SHDOM and used in the
       reconstruction algorithm: (a,b) Two images (out of 100) of the
-      same scene from different cameras. Red rectangle marks the
-      Region Of Interest of the reconstruction algorithm. (c,d) The
-      same images with the simulated sun-blocker applied.}
+      same scene from different cameras. The red-marked rectangles define
+      a region of interest, right above the network. (c,d) The
+      same images, taken under a static sun-blocker.}
     \label{fig:simulation_imgs1}
   \end{center}
 \end{figure}
 
-To test the performance of the camera network as function of its size
-we used random subsets of the network, where the whole images are
-taken either with or without a sun blocker. The different network
-subsets were compared based on their cloud classification score.  In
-the LES, a voxel is occupied by cloud if its water-mass parameter is
-not null. In the recovery, voxel $k$ is classified as cloud if
-$T_k>0.01$.  We measured the classification error rate, across all
-voxels.  The results are plotted in Fig.~\ref{fig:simulations}.  As
-expected of space carving, results improve fast from 2 to 10
-cameras. Even when a sun blocker is applied, the algorithm is able to
-reconstruct the cloud formation. Then, as expected, more cameras are
-needed in order to compensate for the limited view of each camera. In
-our setup the cameras observe the clouds only from below. This is the
-classical limited angle problem known from visual hull and tomography
-algorithms. Therefore the reconstruction error does not converge to
-zero.
 
-\begin{figure}
-  \begin{center}
-    \includegraphics{figures/simulations.eps}
-    \caption{Classification error rate as a function of the number of
-      cameras. [Solid Blue] Without sun blocker. [Dashed Red] With sun
-      blocker.  Fluctuations are within the random sampling standard
-      deviation.}
-    \label{fig:simulation}
-  \end{center}
-\end{figure}
-
-
-% ===========================================================
-\section{SIFT}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection*{Spatial similarity score}
+\section{Appearance Consistency Score}
 \label{sec:appearancecore}
 
-During our experiments, we had found that simple color consistency was not enough when tackling difficult cloud structures such as high-altitude ciruss due to spatial ambiguity and very low baseline between the cameras. In such cases spatial information would be a natural way of incorporating a multi-view stereo approach into our space-carving scheme.
-Dense SIFT~\cite{DenseSift2011} has been recently proven to be an efficient feature for non-rigid matching between pairs of images.
-In a similar manner, dense SIFT can be incorporated in our multi-view probablistic space-carving scheme to represent the structural appearance of a projected voxel. SIFT descriptors also give us the benefit of robustness under scale and view-angle variations.
+Basic space carving is usually based on pointwise photo-consistency. As we explain in Sec.~8 of the submitted main paper, sometimes in clouds photo-consistency is not sufficiently discriminative. Dense SIFT~\cite{DenseSift2011} can be effective for non-rigid image matching. Similarly, dense SIFT can be incorporated into a space-carving scheme, to represent structural appearance of a projected voxel. SIFT is robust to scale and view-angle variations.
 Voxel $k$ projects to a subset of the rays $\rho_k\subset{\cal R}$,
-that reach $\nu_k$ viewpoints.
-For each of the rays $r\in\rho_k$ at time $t$, we sample the 3 RGB values and compute the 128-bin SIFT descriptor for the 8x8 patch surrounding the ray.
+that reach $\nu_k$ viewpoints. 
+For each of the rays $r\in\rho_k$ at time $t$, we sample the 3 RGB values. Moreover, each ray $r$ corresponds to a pixel ${\bf x}$. From an $8 \times 8$ patch around ${\bf x}$, a 
+128-bin SIFT descriptor is extracted.
 The resulting feature vector ${\bf v}(r,t)$ is a weighted concatenation of the RGB values and the 128-bin SIFT vector.
 
-Spatial similarity score in defined as a simple sum of variences in the different components of the feature vectors:
+Appearance-consistency is measured by a simple sum of variances in the different components of the feature vectors:
 \begin{equation}
  P_k= \exp\left(
          -\Sigma_q\{VAR[{\cal V}_q(k,t)]\}/\sigma^2
@@ -144,7 +91,6 @@ Spatial similarity score in defined as a simple sum of variences in the differen
  \label{eq:Dist}
 \end{equation}
 where $q=\{1..131\}$ and $\sigma^2$ is a global scale parameter.
-
 
 
 
