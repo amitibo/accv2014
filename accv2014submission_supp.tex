@@ -6,7 +6,7 @@
 \documentclass[runningheads]{llncs}
 \usepackage{graphicx}
 \usepackage{amsmath,amssymb} % define this before the line numbering.
-\usepackage{ruler}
+%\usepackage{ruler}
 \usepackage{color}
 
 \usepackage{epstopdf}
@@ -21,21 +21,19 @@
 \pagestyle{headings}
 \mainmatter
 
-
-\def\ACCV14SubNumber{215}  % Insert your submission number here
-
 %===========================================================
 \title{Clouds in The Cloud:\\
 Supplementary Material}
-\titlerunning{ACCV-14 submission ID \ACCV14SubNumber - Supplementary Material}
-\authorrunning{ACCV-14 submission ID \ACCV14SubNumber - Supplementary Material}
 
-\author{Anonymous ACCV 2014 submission}
-\institute{Paper ID \ACCV14SubNumber}
+\titlerunning{Clouds in The Cloud - Supplementary Material}
+\authorrunning{Dmitry Veikherman, Amit Aides and Yoav Y. Schechner}
+
+\author{Dmitry Veikherman, Amit Aides and Yoav Y. Schechner}
+\institute{Dept. of Electrical Engineering, Technion - Israel Inst. Technology}
 
 \maketitle
 \begin{abstract}
-In the submitted paper we describe simulations and an appearance consistency measure that we used. The essence is in the paper, while in this supplemental document we give more details and results.
+In~\cite{danny2014} we describe simulations and an appearance consistency measure that we used. The essence is in the paper, while in this supplemental document we give more details and results.
 
 \end{abstract}
 
@@ -57,7 +55,7 @@ An atmosphere over $8{\rm km}\times 8{\rm km}$  was produced using off-the-shelf
 The LWC field then affected radiative transfer, calculated using the discrete ordinate spherical-harmonic method (SHDOM)~\cite{Evans1998}. The solar zenith angle was set to $\frac{\pi}{4}$.
 
 Figs.~\ref{fig:simulation_imgs1}(a,b) show images from two out of 100
-synthesized cameras. The atmosphere above cameras is marked by red rectangles in Figs.~\ref{fig:simulation_imgs1}(a,b)). The applied static Sun-blocker is tailored to solar trajectories in Copenhagen (unrelated to the anonymous authors) latitude. Figs.~\ref{fig:simulation_imgs1}(c,d) show images using the simulated Sun-blocker.
+synthesized cameras. The atmosphere above cameras is marked by red rectangles in Figs.~\ref{fig:simulation_imgs1}(a,b)). The applied static Sun-blocker is tailored to solar trajectories in Copenhagen latitude. Figs.~\ref{fig:simulation_imgs1}(c,d) show images using the simulated Sun-blocker.
 We reconstructed the cloud distribution in the atmosphere above cameras. Fig.~\ref{fig:simulation_imgs2}(b) shows one reconstruction result, as described in the main (submitted) paper.
 \begin{figure}
   \begin{center}
@@ -101,25 +99,6 @@ Appearance-consistency is based on summing the variances in the different compon
 \end{equation}
 Here $\sigma^2$ is a global scale parameter which is set to $\sigma^2=0.1$ throughout our experiments.
 
-
-\section{Additional experimental results}
-\label{sec:addexp}
-
-To further demonstrate our cloud reconstruction algorithm, we supply
-here an additional cloud reconstruction result. Fig.~\ref{fig:scene}
-shows the reconstruction result of a few clouds passing above the
-camera setup.  Also, a 3D illustration of the reconstruction result
-can bee seen in the attached movie (set 3).
-
-\begin{figure}
-  \begin{center}
-    \includegraphics{figures/clouds_reconstructions_supp}
-    \caption{3D cumulus cloud recovery results. (a,b) Cross-sections
-      and iso-surfaces visualization of the recovered cloud-occupancy
-      (c,d) Two viewpoints out of four used for the clouds recovery.}
-    \label{fig:scene}
-  \end{center}
-\end{figure}
 \newpage
 % ===========================================================
 \bibliographystyle{splncs} \bibliography{cloudsbib}
