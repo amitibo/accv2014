@@ -105,7 +105,7 @@ A network of sky-observing cameras is spread over a region. The location vector 
 An interesting assumption that can be made is {\em regional stationarity}. In a region containing the cameras, the chance of a cloud, clear sky, or haziness affecting $\tilde I_t[{\bf l}_c,{\bm \theta}]$ is {\em independent} of $c$. Thus, inter-camera image variations due to atmospheric conditions are {\em random and unbiased}. This is illustrated in Fig.~\ref{fig:station}.
 \begin{figure}[t!]
   \begin{center}
-    \includegraphics[width=\linewidth]{figures/regional_stationarity.eps}
+    \includegraphics[width=\linewidth]{regional_stationarity.eps}
   \end{center}
   \vspace{-0.6cm}
   \caption{  %[a] and [b] show the network at times $t_1$ and $t_2$ respectively.
@@ -152,7 +152,7 @@ We solved it using exhaustive search or gradient descent from null initializatio
 
 \begin{figure}[t!]
 \begin{center}
-   \includegraphics[width=0.9\linewidth]{figures/sun_moon.eps}
+   \includegraphics[width=0.9\linewidth]{sun_moon.eps}
 \end{center}
    \vspace{-0.6cm}
    \caption{(a) To estimate the camera yaw-pitch-roll angle vector ${\bf \Theta}_c$, we rely on
@@ -200,7 +200,7 @@ We performed experiments, with a small field-deployed network (STARS), detailed 
 $\tilde I_t[{\bf l}_a,{\bm \theta}]$ vs.~$\tilde I_t[{\bf l}_{b},{\bm \theta}]$, $\forall t,{\bm \theta}$, for the red-channel.
 \begin{figure}[t!]
 \begin{center}
-   \includegraphics[width=\linewidth]{figures/bias4.eps}
+   \includegraphics[width=\linewidth]{bias4.eps}
 \end{center}
    \vspace{-0.6cm}
    \caption{[a] Splitting the field of view to upper/lower halves, to pixels corresponding
@@ -238,7 +238,7 @@ Before proceeding with mathematical problems and solutions, we give more details
 STARS used several rooftops at the Technion and ran for weeks, capturing 70GB of sky imagery~\cite{download}.
 \begin{figure}[t!]
 \begin{center}
-   \includegraphics[width=1\linewidth]{figures/scene_d.eps}
+   \includegraphics[width=1\linewidth]{scene_d.eps}
 \end{center}
    \vspace{-1.2cm}
    \caption{Images taken simultaneously by a 5-node STARS network. They are geometrically aligned to the zenith and north, and resampled to {\em polar azimuthal equidistant} projection in this global system. Equidistant zenith angle circles are overlayed on $\tilde I_t[{\bf l}_e,{\bm \theta}]$ (camera $e$). Each camera had dead-regions, due to rough lens alignment.
@@ -268,7 +268,7 @@ where $t\in[1\ldots N^{\rm frames}]$ and $c\in[1\ldots N^{\rm views}]$.
 This is illustrated in Fig.~\ref{fig:sky}.
 \begin{figure}[t!]
 \begin{center}
-   \includegraphics{figures/Background.eps}
+   \includegraphics{Background.eps}
 \end{center}
    \vspace{-0.6cm}
    \caption{[Left] Estimation of the sky background, using Eq.~(\ref{eq:SKY}) based on five temporal instances and five viewpoints. [Right] Estimation of the sky background, using five temporal instances, but just a single viewpoint, resulting in more residual clouds.}
@@ -283,7 +283,7 @@ This is illustrated in Fig.~\ref{fig:sky}.
 As Sec.~\ref{sec:Signelflare} explains, in existing full sky-imagers, effects of direct sunlight are often mitigated by a small dynamic sun-blocker, which complicates the system and its cost, while having a blind-region. The network offers a different solution, which can be radical, yet simple. On each camera, the sun-blocker is {\em static}, and has no moving part. The blocker can be large, covering the entire range of directions the Sun may occupy during the year or part of it. In this configuration, each camera unit has a large blind area (See Fig.~\ref{fig:blindspot}). Nevertheless, the entire {\em network has no blind spot}, when viewing the atmosphere. This remarkable property is a result of network-redundancy, as we explain.
 \begin{figure}[t!]
 \begin{center}
-   \includegraphics[width=0.99\linewidth]{figures/sun_blocks2.pdf}
+   \includegraphics[width=0.99\linewidth]{sun_blocks2.pdf}
 \end{center}
    \vspace{-0.6cm}
    \caption{[a] Camera $c$ has a blind-region, covering Sun directions at ${\bf l}_c$. The blind region corresponds to set $\Gamma_c$ of atmospheric voxels not sensed by by camera $c$. The network as a whole still has coverage of voxels $k\in\Gamma_c$, as they are observed by cameras $e,f,g$.
@@ -382,7 +382,7 @@ We measured the classification error rate, across all voxels.
 The results are plotted in Fig.~\ref{fig:simulations}. 
 \begin{figure}[t]
   \begin{center}
-    \includegraphics[width=0.65\linewidth]{figures/simulations.eps}
+    \includegraphics[width=0.65\linewidth]{simulations.eps}
     \vspace{-0.2cm}
     \caption{Classification error rate vs.~{$N^{\rm views}$}. Without or with a sun blocker.  Fluctuations are within the random sampling standard deviation.}
     \label{fig:simulations}
@@ -390,7 +390,7 @@ The results are plotted in Fig.~\ref{fig:simulations}.
 \end{figure}
 \begin{figure}[h!]
 \begin{center}
-   \includegraphics[width=0.95\linewidth]{figures/clouds_reconstructions.pdf}
+   \includegraphics[width=0.95\linewidth]{clouds_reconstructions.pdf}
 \end{center}
    \vspace{-0.6cm}
    \caption{3D cumulus cloud recovery results. (a,b) Cross-sections of the recovered cloud-occupancy field $\{\tilde T_k\}$. The domain of the clouds is much larger than STARS. Cloud
@@ -435,7 +435,7 @@ Like sun-blocking, this rendering exploits network redundancy. Even if a viewpoi
 Another scene had a layer of altocumulus clouds. Figure~\ref{fig:alto} shows sample frames from this scene, and a cross-section of the recovered 3D cloud-occupancy field $\{\tilde T_k\}$.
 \begin{figure}[t!]
 \begin{center}
-   \includegraphics[width=1\linewidth]{figures/altos_reconstructions.pdf}
+   \includegraphics[width=1\linewidth]{altos_reconstructions.pdf}
 \end{center}
    \vspace{-0.6cm}
    \caption{3D altocumulus cloud recovery results. (a,b) Sample frames.
