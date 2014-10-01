@@ -26,10 +26,10 @@
 Supplementary Material}
 
 \titlerunning{Clouds in The Cloud - Supplementary Material}
-\authorrunning{Dmitry Veikherman, Amit Aides and Yoav Y. Schechner}
+\authorrunning{Dmitry Veikherman, Amit Aides, Yoav Y. Schechner and Aviad Levis}
 
-\author{Dmitry Veikherman, Amit Aides and Yoav Y. Schechner}
-\institute{Dept. of Electrical Engineering, Technion - Israel Inst. Technology}
+\author{Dmitry Veikherman, Amit Aides, Yoav Y. Schechner and Aviad Levis}
+\institute{Dept. of Electrical Engineering, Technion - Israel Inst. of Technology, Haifa, Israel}
 
 \maketitle
 \begin{abstract}
@@ -55,8 +55,8 @@ An atmosphere over $8{\rm km}\times 8{\rm km}$  was produced using off-the-shelf
 The LWC field then affected radiative transfer, calculated using the discrete ordinate spherical-harmonic method (SHDOM)~\cite{Evans1998}. The solar zenith angle was set to $\frac{\pi}{4}$.
 
 Figs.~\ref{fig:simulation_imgs1}(a,b) show images from two out of 100
-synthesized cameras. The atmosphere above cameras is marked by red rectangles in Figs.~\ref{fig:simulation_imgs1}(a,b). The applied static Sun-blocker is tailored to solar trajectories in the latitude of Copenhagen. Figs.~\ref{fig:simulation_imgs1}(c,d) show images using the simulated Sun-blocker.
-We reconstructed the cloud distribution in the atmosphere above cameras. Fig.~\ref{fig:simulation_imgs2}(b) shows one reconstruction result, as described in~\cite{danny2014}.
+synthesized cameras. The atmosphere above the cameras is marked by red rectangles in Figs.~\ref{fig:simulation_imgs1}(a,b). The applied static Sun-blocker is tailored to solar trajectories in the latitude of Copenhagen. Figs.~\ref{fig:simulation_imgs1}(c,d) show images using the simulated Sun-blocker.
+We reconstructed the cloud distribution in the atmosphere above the cameras. Fig.~\ref{fig:simulation_imgs2}(b) shows one reconstruction result, as described in~\cite{danny2014}.
 \begin{figure}
   \begin{center}
     \includegraphics{figures/simulation_imgs}
@@ -75,9 +75,9 @@ We reconstructed the cloud distribution in the atmosphere above cameras. Fig.~\r
 
 In Sec.~8 of~\cite{danny2014}, we describe a matching criterion we used to demonstrate space carving of clouds. Here we give more details about it, to ease reproducibility.
 
-Basic space carving is usually based on pointwise photo-consistency. As we explain in Sec.~8 of~\cite{danny2014}, in clouds photo-consistency is sometimes not sufficiently discriminative. Dense SIFT~\cite{liu2008sift} can be effective for non-rigid image matching. Similarly, dense SIFT can be incorporated into a space-carving scheme, to represent structural appearance of a projected voxel. SIFT is robust to scale and view-angle variations.
+Basic space carving is usually based on pointwise photo-consistency. As we explain in Sec.~8 of~\cite{danny2014}, in clouds photo-consistency is sometimes not sufficiently discriminative. Dense SIFT~\cite{liu2008sift} can be effective for non-rigid image matching. Similarly, dense SIFT can be incorporated into a space-carving scheme, to represent structural appearance of a projected voxel.
 Voxel $k$ projects to a subset of the rays $\rho_k\subset{\cal R}$.
-For each of ray $r\in\rho_k$, we measure the radiance $\hat I_t^{\chi}(r)$ (after correction for the radiometric non-uniformities), where
+For each ray $r\in\rho_k$, we measure the radiance $\hat I_t^{\chi}(r)$ (after correcting radiometric non-uniformities), where
  $\chi\in\{{\rm R,G,B}\}$ is the color-channel index. This forms a photometric vector ${\bf v}^{\rm phot}(r,t)=[\hat I^{\rm R}_t(r),\hat I^{\rm G}_t(r),\hat I^{\rm B}_t(r)]$, which is scaled globally to a unit bound.
 
 In addition, each ray $r$ corresponds to a pixel ${\bf x}$. From a %n $8 \times 8$
@@ -94,12 +94,12 @@ Appearance-consistency is based on summing the variances in the different compon
  P_k= \exp\left(
          -\sum_{q=1}^{131}\{{\rm VAR}[{\cal V}_q(k,t)]\}/\sigma^2
          \right)
-  \;,
+  \;.
  \label{eq:Dist}
 \end{equation}
 Here $\sigma^2$ is a global scale parameter which is set to $\sigma^2=0.1$ throughout our experiments.
 
-\newpage
+%\newpage
 % ===========================================================
 \bibliographystyle{splncs} \bibliography{cloudsbib}
 
